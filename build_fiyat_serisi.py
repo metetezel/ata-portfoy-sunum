@@ -36,14 +36,16 @@ TEFAS_HEADERS = {
 }
 
 
+TEFAS_ONBELLEK_KLASORU = os.path.join(os.path.dirname(__file__), "tefas_onbellek")
+
+
 def tefas_fiyat_serisi_oku(fon_kodu, baslangic):
     # TEFAS'ın (Türkiye'nin resmi fon alım-satım platformu) kendi
     # fonGnlBlgSiraliGetir uç noktası — fonun GERÇEK, resmi NAV/fiyat
     # serisini doğrudan TEFAS'tan çekiyor. dagilimSiraliGetirT'nin aksine
     # (bkz. guncelle_fon_portfoy_dagilimi.py) bu uç nokta GERÇEKTEN tarih
     # aralığı destekliyor — ama sunucu tarafında sert bir sınır var: "Tarih
-    # aralığı 1 ayı aşamaz". Bu yüzden ay ay parçalı çekiliyor (2016'dan
-    # bugüne ~125 istek, birkaç dakika sürüyor).
+    # aralığı 1 ayı aşamaz". Bu yüzden ay ay parçalı çekiliyor.
     #
     # ANZ için bulundu (2026-07-30, Mete'nin "daha iyi bir kaynak bulunursa
     # değiştir" notu üzerine): önceki en iyi kaynak (Sunum.xlsx!Eurobond)
@@ -54,9 +56,34 @@ def tefas_fiyat_serisi_oku(fon_kodu, baslangic):
     # ANZ "Döviz" (USD) fonu olduğu için TEFAS'ın "fiyat" alanı zaten USD
     # bazında (TL'ye çevrilmiş değil) — 100→2145 gibi bir "hokey sopası"
     # yok, aksine legacy'nin beklediği ~100→135 ölçeğiyle uyumlu.
-    seri = {}
-    ay_basi = baslangic.replace(day=1)
+    #
+    # 2026-07-30: önbellek eklendi (Mete'nin "ANZ için 11dk çok uzun" notu
+    # üzerine). Eskiden her çalıştırmada baslangic'tan (2021-08-01) bugüne
+    # TÜM aylar (~60 istek × 11sn ≈ 11dk) yeniden çekiliyordu — geçen
+    # haftaki aylar hiç değişmemiş olsa bile. Şimdi önceki çalıştırmanın
+    # sonucu tefas_onbellek/{kod}.json'a kaydediliyor; sonraki
+    # çalıştırmalarda sadece önbellekteki son ayın BİR ÖNCESİNDEN bugüne
+    # kadar yeniden çekiliyor (geç gelen/düzeltilen veriye karşı 1 aylık
+    # güvenlik payıyla), geri kalanı diskten okunuyor. İlk çalıştırma
+    # (önbellek boşken) hâlâ ~11dk sürer; sonraki her hafta sadece 1-2 ay
+    # (~20-30sn) çekiyor.
+    os.makedirs(TEFAS_ONBELLEK_KLASORU, exist_ok=True)
+    onbellek_yolu = os.path.join(TEFAS_ONBELLEK_KLASORU, f"{fon_kodu.lower()}.json")
+    onbellek = {}
+    if os.path.exists(onbellek_yolu):
+        with open(onbellek_yolu, encoding="utf-8") as f:
+            onbellek = {datetime.date.fromisoformat(t): float(v) for t, v in json.load(f).items()}
+
     bugun = datetime.date.today()
+    if onbellek:
+        son_onbellek_ay_basi = max(onbellek).replace(day=1)
+        bir_onceki_ay_basi = (son_onbellek_ay_basi - datetime.timedelta(days=1)).replace(day=1)
+        ay_basi = max(bir_onceki_ay_basi, baslangic.replace(day=1))
+        print(f"  TEFAS önbelleği bulundu ({len(onbellek)} gün, son ay {son_onbellek_ay_basi}) — {ay_basi} itibariyle yeniden çekiliyor.")
+    else:
+        ay_basi = baslangic.replace(day=1)
+
+    seri = dict(onbellek)
     while ay_basi <= bugun:
         sonraki_ay = datetime.date(ay_basi.year + 1, 1, 1) if ay_basi.month == 12 else ay_basi.replace(month=ay_basi.month + 1)
         ay_sonu = min(sonraki_ay - datetime.timedelta(days=1), bugun)
@@ -91,6 +118,9 @@ def tefas_fiyat_serisi_oku(fon_kodu, baslangic):
         # test sırasında 429 ile bulundu) — dakikada 6'nın altında kalacak
         # şekilde 11sn bekleniyor.
         time.sleep(11)
+
+    with open(onbellek_yolu, "w", encoding="utf-8") as f:
+        json.dump({d.isoformat(): v for d, v in seri.items()}, f, ensure_ascii=False)
     return seri
 
 # col indices are 0-based positions within an openpyxl values_only row tuple

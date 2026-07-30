@@ -1,0 +1,29 @@
+HAFTALIK SUNUM GUNCELLEME - NASIL KULLANILIR
+==============================================
+
+Terminale, Cursor'a, hicbir seye gerek yok. Bu klasordeki 3 dosyaya
+SIRAYLA cift tikla, hepsi bu.
+
+1 - Veriyi Guncelle.bat
+    Ne yapar: TEFAS/MSCI/EVDS gibi kaynaklardan haftalik veriyi ceker,
+    Veri_Kaynagi.xlsx'i gunceller.
+    Ne kadar surer: ~5-8 dakika (ilk calistirmada ~15 dakika olabilir).
+    Bitince: siyah pencerede "Islem tamamlandi" yazar, bir tusa basip
+    kapatabilirsin.
+
+2 - Web Sunucusunu Baslat.bat
+    Ne yapar: Sunumu tarayicida gorebilmen icin web sitesini calistirir.
+    ONEMLI: Acilan pencereyi KAPATMA - sunum ancak bu pencere acikken
+    calisir. Hazir olunca tarayicida şu adresi ac:
+    http://localhost:3000/sunum
+
+3 - PDF ve PowerPoint Uret.bat
+    Ne yapar: Sunumu PDF ve PowerPoint dosyasi olarak uretir.
+    Kosul: "2 - Web Sunucusunu Baslat" penceresi hala acik ve calisir
+    olmali - degilse once onu baslat.
+    Ciktilar nereye kaydedilir: bir ust klasordeki
+    "Sunum Dosyalari\PDF\2026\" ve "\PowerPoint\2026\" klasorlerine.
+
+Bir sorun cikarsa: bir ust klasordeki BASLANGIC.md ve Pazartesi_Rutini.md
+dosyalarina bakabilir, ya da hata mesajinin ekran goruntusunu
+paylasabilirsin.
