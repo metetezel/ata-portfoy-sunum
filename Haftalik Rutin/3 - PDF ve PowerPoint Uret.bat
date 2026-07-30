@@ -1,5 +1,5 @@
 @echo off
-cd /d "C:\Users\metete\ata-portfoy-web"
+cd /d "%USERPROFILE%\ata-portfoy-web"
 echo PDF ve PowerPoint uretiliyor...
 echo (2 numarali "Web Sunucusunu Baslat" penceresinin hala acik ve
 echo  calisiyor olmasi gerekiyor - degilse once onu calistirin.)

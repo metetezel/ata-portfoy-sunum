@@ -25,7 +25,12 @@ FON_BROSUR_YOLU = os.environ.get(
 # donuk tarihi veri) sabit_kaynaklar/anz_eurobond_gecmis.json'a taşındı —
 # Sunum.xlsx artık projeden silinebilir.
 SABIT_KAYNAKLAR_KLASORU = os.path.join(os.path.dirname(__file__), "sabit_kaynaklar")
-CIKTI_KLASORU = r"C:\Users\metete\ata-portfoy-web\data"
+# Z:'deki proje kopyasına göre göreli — sürücü harfi (Z: ev PC'de, farklı/hiç
+# olmayabilir ofis PC'sinde) yerine \\atafiles UNC paylaşımına dayanan aynı
+# mantık (bkz. ata-portfoy-web/lib/veriKaynagi.ts). Web app'in kendi çalışma
+# kopyası artık her oturumda buradan yerel diske tazelendiği için çıktı
+# doğrudan buraya, tek kaynağa yazılmalı.
+CIKTI_KLASORU = os.path.join(os.path.dirname(__file__), "ata-portfoy-web", "data")
 
 TEFAS_HEADERS = {
     "Content-Type": "application/json",

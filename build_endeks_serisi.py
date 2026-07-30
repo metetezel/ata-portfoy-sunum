@@ -23,7 +23,9 @@ import requests
 # isteğiyle).
 SABIT_KAYNAKLAR_KLASORU = os.path.join(os.path.dirname(__file__), "sabit_kaynaklar")
 EVDS_ANAHTAR_YOLU = os.path.join(os.path.dirname(__file__), "evds_api_anahtari.txt")
-CIKTI_KLASORU = r"C:\Users\metete\ata-portfoy-web\data"
+# Z:'deki proje kopyasına göre göreli, sürücü harfine bağımlı değil — bkz.
+# build_fiyat_serisi.py'deki aynı değişiklik için yazılan not.
+CIKTI_KLASORU = os.path.join(os.path.dirname(__file__), "ata-portfoy-web", "data")
 
 TARAYICI_UA = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "

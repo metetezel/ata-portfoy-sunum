@@ -12,10 +12,13 @@ SIRAYLA cift tikla, hepsi bu.
     kapatabilirsin.
 
 2 - Web Sunucusunu Baslat.bat
-    Ne yapar: Sunumu tarayicida gorebilmen icin web sitesini calistirir.
-    ONEMLI: Acilan pencereyi KAPATMA - sunum ancak bu pencere acikken
-    calisir. Hazir olunca tarayicida şu adresi ac:
-    http://localhost:3000/sunum
+    Ne yapar: guncel kodu/veriyi Z:'den bilgisayarina kopyalar, sonra
+    sunumu tarayicida gorebilmen icin web sitesini calistirir - tarayici
+    kendiliginden acilir.
+    Ne kadar surer: ~30-40 saniye (kopyalama + kurulum), sonra tarayici
+    otomatik acilir.
+    ONEMLI: "SUNUM SUNUCUSU" basligindaki AYRI pencereyi KAPATMA - sunum
+    ancak o pencere acikken calisir. Ilk acilan (bu) pencereyi kapatabilirsin.
 
 3 - PDF ve PowerPoint Uret.bat
     Ne yapar: Sunumu PDF ve PowerPoint dosyasi olarak uretir.
