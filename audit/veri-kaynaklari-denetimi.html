@@ -1,0 +1,456 @@
+<title>Sunum — Veri Kaynakları ve Otomasyon Denetimi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #f6f4ef;
+    --bg-raised: #ffffff;
+    --bg-sunken: #edeae2;
+    --ink: #1d2521;
+    --ink-soft: #57635c;
+    --ink-faint: #8d968e;
+    --line: #e2ddd0;
+    --line-strong: #cdc4ac;
+    --brand: #c1531c;
+    --brand-soft: #f7e2d1;
+    --auto: #2f7d52;
+    --auto-soft: #e3f1e7;
+    --partial: #9c6b0b;
+    --partial-soft: #f6ecd5;
+    --manual: #a24444;
+    --manual-soft: #f5e5e1;
+    --static: #4c6b7c;
+    --static-soft: #e6edf1;
+    --shadow: 0 1px 2px rgba(20, 20, 15, 0.06), 0 10px 28px -14px rgba(20, 20, 15, 0.18);
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #14120e;
+    --bg-raised: #1c1a15;
+    --bg-sunken: #100f0b;
+    --ink: #ece8de;
+    --ink-soft: #b3ac9c;
+    --ink-faint: #837c6d;
+    --line: #2c2921;
+    --line-strong: #3d382c;
+    --brand: #e8895a;
+    --brand-soft: #3a2618;
+    --auto: #6cc796;
+    --auto-soft: #1a2e21;
+    --partial: #e0b757;
+    --partial-soft: #332a12;
+    --manual: #e08585;
+    --manual-soft: #362020;
+    --static: #8fb4c7;
+    --static-soft: #1c2a30;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 10px 32px -14px rgba(0, 0, 0, 0.6);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14120e;
+      --bg-raised: #1c1a15;
+      --bg-sunken: #100f0b;
+      --ink: #ece8de;
+      --ink-soft: #b3ac9c;
+      --ink-faint: #837c6d;
+      --line: #2c2921;
+      --line-strong: #3d382c;
+      --brand: #e8895a;
+      --brand-soft: #3a2618;
+      --auto: #6cc796;
+      --auto-soft: #1a2e21;
+      --partial: #e0b757;
+      --partial-soft: #332a12;
+      --manual: #e08585;
+      --manual-soft: #362020;
+      --static: #8fb4c7;
+      --static-soft: #1c2a30;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 10px 32px -14px rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+  }
+
+  body {
+    font-family: Corbel, Calibri, "Segoe UI", "Noto Sans", sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    padding: 0 0 6rem;
+  }
+
+  h1, h2, h3 { font-family: Constantia, Cambria, Georgia, "Iowan Old Style", serif; font-weight: 600; color: var(--ink); text-wrap: balance; margin: 0; }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.75rem; }
+
+  /* ---------- Header ---------- */
+
+  header.hero {
+    border-bottom: 1px solid var(--line);
+    padding: 3rem 0 2.2rem;
+    background: linear-gradient(180deg, var(--bg-sunken), var(--bg) 72%);
+  }
+
+  .eyebrow {
+    font-family: Consolas, "Cascadia Code", "SF Mono", monospace;
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brand);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.9rem;
+  }
+  .eyebrow::before { content: ""; width: 0.5rem; height: 0.5rem; background: var(--brand); border-radius: 1px; display: inline-block; }
+
+  h1 { font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 0.55rem; letter-spacing: -0.01em; }
+  .hero p.lede { max-width: 66ch; color: var(--ink-soft); font-size: 1.02rem; margin: 0; }
+  .hero p.lede b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- Stat strip ---------- */
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin-top: 2.1rem; }
+  .stat { background: var(--bg-raised); padding: 1rem 1.2rem; }
+  .stat .n { font-family: Consolas, "Cascadia Code", monospace; font-variant-numeric: tabular-nums; font-size: 1.55rem; font-weight: 600; line-height: 1; }
+  .stat .n.auto { color: var(--auto); }
+  .stat .n.partial { color: var(--partial); }
+  .stat .n.manual { color: var(--manual); }
+  .stat .n.brand { color: var(--brand); }
+  .stat .l { margin-top: 0.4rem; font-size: 0.8rem; color: var(--ink-faint); }
+
+  /* ---------- Sections ---------- */
+
+  main { padding-top: 2.6rem; }
+  section.block { margin-bottom: 2.7rem; }
+
+  .block-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; border-bottom: 2px solid var(--ink); padding-bottom: 0.5rem; margin-bottom: 0.2rem; }
+  .block-head h2 { font-size: 1.18rem; }
+  .block-head .range { font-family: Consolas, monospace; font-size: 0.78rem; color: var(--ink-faint); white-space: nowrap; }
+  .block-note { color: var(--ink-soft); font-size: 0.9rem; margin: 0.55rem 0 1rem; max-width: 74ch; }
+
+  /* ---------- Table ---------- */
+
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  thead th { text-align: left; font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); font-weight: 600; padding: 0 0.65rem 0.5rem; border-bottom: 1px solid var(--line-strong); white-space: nowrap; }
+  tbody td { padding: 0.6rem 0.65rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tbody tr:hover td { background: var(--bg-sunken); }
+  td.title { color: var(--ink); font-weight: 600; min-width: 15ch; }
+  td.title .sub { display: block; font-weight: 400; color: var(--ink-soft); font-size: 0.83rem; margin-top: 0.12rem; }
+  td.src { color: var(--ink-soft); }
+  td.src .via { display: block; color: var(--ink-faint); font-size: 0.8rem; margin-top: 0.1rem; }
+  td.note { color: var(--ink-faint); font-size: 0.83rem; max-width: 30ch; }
+
+  .pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.55rem 0.2rem 0.45rem; border-radius: 100px; font-size: 0.73rem; font-weight: 600; white-space: nowrap; }
+  .pill::before { content: ""; width: 0.4rem; height: 0.4rem; border-radius: 50%; flex: none; }
+  .pill.auto { background: var(--auto-soft); color: var(--auto); }
+  .pill.auto::before { background: var(--auto); }
+  .pill.partial { background: var(--partial-soft); color: var(--partial); }
+  .pill.partial::before { background: var(--partial); }
+  .pill.manual { background: var(--manual-soft); color: var(--manual); }
+  .pill.manual::before { background: var(--manual); }
+  .pill.static { background: var(--static-soft); color: var(--static); }
+  .pill.static::before { background: var(--static); }
+
+  .yeni { display: inline-block; margin-left: 0.4rem; padding: 0.05rem 0.4rem; border-radius: 4px; background: var(--brand); color: #fff; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.04em; vertical-align: 1px; }
+
+  /* ---------- Gaps / priority list ---------- */
+
+  .gaps { display: flex; flex-direction: column; gap: 0.9rem; }
+  .gap-card { display: grid; grid-template-columns: 2.6rem 1fr; gap: 1rem; background: var(--bg-raised); border: 1px solid var(--line); border-radius: 10px; padding: 1.1rem 1.3rem; box-shadow: var(--shadow); }
+  .gap-rank { font-family: Constantia, Cambria, Georgia, serif; font-size: 1.5rem; font-weight: 600; color: var(--line-strong); line-height: 1; }
+  .gap-card.p-high .gap-rank { color: var(--manual); }
+  .gap-card.p-med .gap-rank { color: var(--partial); }
+  .gap-card.p-low .gap-rank { color: var(--ink-faint); }
+  .gap-body h3 { font-size: 1rem; font-family: Corbel, Calibri, sans-serif; font-weight: 700; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap; }
+  .gap-tag { font-family: Consolas, monospace; font-size: 0.68rem; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.12rem 0.45rem; border-radius: 4px; border: 1px solid var(--line-strong); color: var(--ink-faint); }
+  .gap-body p { margin: 0; color: var(--ink-soft); font-size: 0.9rem; max-width: 76ch; }
+  .gap-body p.why { margin-top: 0.45rem; color: var(--ink-faint); font-size: 0.85rem; }
+  .gap-body p.why b { color: var(--ink-soft); font-weight: 600; }
+
+  /* ---------- Callout / legend ---------- */
+
+  .legend { display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem; margin: 0.9rem 0 0; font-size: 0.83rem; color: var(--ink-soft); }
+  .legend span.pill { font-size: 0.73rem; }
+
+  .callout { background: var(--bg-raised); border: 1px solid var(--line); border-left: 3px solid var(--brand); border-radius: 8px; padding: 1.15rem 1.35rem; box-shadow: var(--shadow); margin: 0.5rem 0 2.6rem; }
+  .callout h3 { font-size: 0.98rem; margin-bottom: 0.55rem; font-family: Corbel, Calibri, sans-serif; color: var(--brand); }
+  .callout ul { margin: 0; padding-left: 1.2rem; color: var(--ink-soft); font-size: 0.9rem; }
+  .callout li { margin-bottom: 0.4rem; }
+  .callout li:last-child { margin-bottom: 0; }
+  .callout code { font-family: Consolas, monospace; background: var(--bg-sunken); padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.85em; }
+
+  footer { max-width: 1080px; margin: 0 auto; padding: 0 1.75rem; color: var(--ink-faint); font-size: 0.8rem; border-top: 1px solid var(--line); padding-top: 1.2rem; }
+
+  @media (max-width: 640px) {
+    .block-head { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
+    td.note { white-space: normal; }
+    .gap-card { grid-template-columns: 1fr; }
+    .gap-rank { display: none; }
+  }
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Sunum Otomasyonu &middot; Durum Denetimi</div>
+    <h1>Hangi veri kendi kendine geliyor, hangisi hâlâ elimizden geçiyor</h1>
+    <p class="lede">
+      <code>/sunum</code> deck'inin <b>32 sayfası</b>, üzerlerini besleyen her veri alanı bazında tek tek tarandı.
+      Referans: 2026-07-30 sonu itibarıyla çalışan sistem — bugün eksik listesindeki <b>9 maddenin hepsi</b> ele alındı
+      (AUM hariç, o bilerek atlandı), üstüne Peer F/K'nın e-posta bağımlılığı tamamen bitti (MSCI'ye taşındı),
+      ANZ'nin fiyat kaynağı TEFAS'ın resmi verisiyle düzeltildi, AED'nin yıllardır açık kalan bir tutarsızlığı çözüldü,
+      ve <b>3 büyük Excel dosyası</b> (Sunum.xlsx dahil, 35,6MB) koddan tamamen ayrıştırılıp silindi — proje artık
+      önemli ölçüde daha az dosyayla, başka birinin devralabileceği bir hâlde.
+    </p>
+    <div class="stats">
+      <div class="stat"><div class="n brand">32</div><div class="l">toplam sayfa</div></div>
+      <div class="stat"><div class="n auto">~38</div><div class="l">otomatik veri alanı</div></div>
+      <div class="stat"><div class="n partial">3</div><div class="l">kısmen otomatik</div></div>
+      <div class="stat"><div class="n manual">5</div><div class="l">hâlâ manuel</div></div>
+      <div class="stat"><div class="n brand">9</div><div class="l">bugün kapanan madde</div></div>
+    </div>
+    <div class="legend">
+      <span class="pill auto">Otomatik</span>
+      <span class="pill partial">Kısmen otomatik</span>
+      <span class="pill manual">Manuel</span>
+      <span class="pill static">Nadiren değişir / statik</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="block">
+    <div class="block-head"><h2>1 · Kapak &amp; Kurumsal</h2><span class="range">sayfa 1–3</span></div>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>Sayfa</th><th>Alan</th><th>Kaynak</th><th>Durum</th><th>Not</th></tr></thead>
+      <tbody>
+        <tr><td class="title">01<span class="sub">Kapak</span></td><td class="src">Tarih</td><td class="src">Kod içinde otomatik üretiliyor</td><td><span class="pill auto">Otomatik</span></td><td class="note">—</td></tr>
+        <tr><td class="title">02<span class="sub">Ata Grubu</span></td><td class="src">Tanıtım metni</td><td class="src">Sabit_Metinler</td><td><span class="pill static">Statik</span></td><td class="note">—</td></tr>
+        <tr><td class="title">03<span class="sub">Fon Özeti</span></td><td class="src">AUM, fon sayıları</td><td class="src">Farshad'ın günlük AUM raporu (Outlook)</td><td><span class="pill manual">Manuel</span></td><td class="note">Outlook iş hesabına erişim yok</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>2 · Piyasa Görünümü &amp; Makro</h2><span class="range">sayfa 4–8</span></div>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>Sayfa</th><th>Alan</th><th>Kaynak</th><th>Durum</th><th>Not</th></tr></thead>
+      <tbody>
+        <tr><td class="title">04–05<span class="sub">Ata Fonları: Güçlü Performans</span></td><td class="src">12 aylık + YBB bar grafik</td><td class="src">COPY Fon Broşür.xlsx <span class="via">guncelle_fon_performans_ozet.py</span></td><td><span class="pill auto">Otomatik</span></td><td class="note">—</td></tr>
+        <tr><td class="title">06<span class="sub">100 TL Portföy Önerisi</span></td><td class="src">Varlık dağılımı + madde metni</td><td class="src">Yatirim_100TL_*</td><td><span class="pill static">Statik</span></td><td class="note">Sadece strateji değişince</td></tr>
+        <tr><td class="title">07<span class="sub">Piyasa Tahminleri</span></td><td class="src">Mevcut Durum</td><td class="src">TCMB kur XML + Yahoo Finance <span class="via">guncelle_piyasa_verileri.py</span></td><td><span class="pill auto">Otomatik</span></td><td class="note">—</td></tr>
+        <tr><td class="title">&nbsp;</td><td class="src">Kötümser / Baz / İyimser</td><td class="src">Analist görüşü</td><td><span class="pill manual">Manuel</span></td><td class="note">Doğası gereği otomatikleşemez</td></tr>
+        <tr><td class="title">08<span class="sub">Makro Tahminleri</span></td><td class="src">17 gösterge × 2026T sütunu</td><td class="src">TÜİK / Ata Portföy / Ata Yatırım</td><td><span class="pill manual">Manuel</span></td><td class="note">EVDS zaten bağlı — bazı göstergeler taşınabilir, bkz. eksikler</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>3 · Fon Sayfaları</h2><span class="range">sayfa 9–23 · 14 fon</span></div>
+    <p class="block-note">Her fon aynı üç bacağı paylaşıyor: getiri tablosu, fon-vs-benchmark fiyat grafiği, portföy dağılım pastası. Üçü de artık her fonda otomatik — tek tek satır satır tekrarlamak yerine ortak durumu ve iki bilinen güven sorununu gösteriyoruz.</p>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>Alan</th><th>Kaynak</th><th>Durum</th><th>Not</th></tr></thead>
+      <tbody>
+        <tr><td class="title">Getiri tablosu<span class="sub">14/14 fon</span></td><td class="src">COPY Fon Broşür.xlsx (Price/Bench/Formül) <span class="via">guncelle_fon_getirileri.py</span></td><td><span class="pill auto">Otomatik</span></td><td class="note">5 yanlış-etiketli benchmark hatası bu süreçte bulunup düzeltildi</td></tr>
+        <tr><td class="title">Fiyat grafiği<span class="sub">14/14 fon</span></td><td class="src">Broşür Price/Bench, fon başına <code>build_fiyat_serisi.py</code></td><td><span class="pill auto">Otomatik</span></td><td class="note">ANZ artık TEFAS'ın resmi verisiyle hibrit <span class="yeni">YENİ</span> — trailing getiri %22,8, doğrulanmış %23,6'ya çok yakın (eskiden %5,2 idi)</td></tr>
+        <tr><td class="title">Portföy dağılımı<span class="sub">14/14 fon</span></td><td class="src">TEFAS resmi API <span class="via">guncelle_fon_portfoy_dagilimi.py</span></td><td><span class="pill auto">Otomatik</span></td><td class="note">2026-07-29'dan beri; kategoriler artık TEFAS'ın kendi ~50 sınıfı</td></tr>
+        <tr><td class="title">AYA temettü verimi tablosu</td><td class="src">Fon_Temettu_Verimi</td><td><span class="pill manual">Manuel</span></td><td class="note">Sadece çeyreklik dağıtım sonrası değişir</td></tr>
+        <tr><td class="title">AED "TL Mevduat" karşılaştırma satırı</td><td class="src">KYD Mevduat Endeksi (%47,5)</td><td><span class="pill auto">Doğrulandı<span class="yeni">YENİ</span></span></td><td class="note">Borsa İstanbul'un resmi BIST-KYD endeksiyle bağımsız çapraz kontrol edildi (%46,6) — %47,5 kesin doğru, legacy'nin %57,9'u hatalıymış</td></tr>
+        <tr><td class="title">ANZ — Türkiye CDS mini-grafiği<span class="sub">deck'te ilk kez</span></td><td class="src">worldgovernmentbonds.com <span class="via">build_endeks_serisi.py</span></td><td><span class="pill auto">Otomatik<span class="yeni">YENİ</span></span></td><td class="note">2015'ten bugüne günlük, ücretsiz — BBG_Weekly.xlsx'e artık gerek yok</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>4 · Borsa İstanbul Değerleme</h2><span class="range">sayfa 24</span></div>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>Alan</th><th>Kaynak</th><th>Durum</th><th>Not</th></tr></thead>
+      <tbody>
+        <tr><td class="title">BIST-100 F/K</td><td class="src">CEIC Data <span class="via">guncelle_degerleme_fk.py</span></td><td><span class="pill auto">Otomatik<span class="yeni">YENİ</span></span></td><td class="note">Bloomberg'e en yakın alternatif (18,3 vs 17,0); sayfa şablon değişikliğine kırılgan</td></tr>
+        <tr><td class="title">GOP F/K, Dünya F/K</td><td class="src">MSCI World factsheet (resmi, ücretsiz) <span class="via">guncelle_degerleme_fk.py</span></td><td><span class="pill auto">Otomatik<span class="yeni">YENİ</span></span></td><td class="note">Tek PDF'te ikisi de var, ayda 1 güncelleniyor</td></tr>
+        <tr><td class="title">İskonto % (Dünya/GOP)</td><td class="src">Yukarıdaki üç rakamdan koddan türetilen</td><td><span class="pill auto">Otomatik</span></td><td class="note">Statik değil, her render'da yeniden hesaplanıyor</td></tr>
+        <tr><td class="title">Peer F/K — 9 emsal ülke, değer + isim<span class="sub">Türkiye hariç</span></td><td class="src">MSCI tek-ülke factsheet'leri <span class="via">guncelle_peer_fk_msci.py</span></td><td><span class="pill auto">Otomatik<span class="yeni">YENİ</span></span></td><td class="note">E-postaya artık gerek yok; isimler de artık otomatik (eskiden manuel taşınıyordu)</td></tr>
+        <tr><td class="title">Peer F/K — Türkiye satırı</td><td class="src">Bloomberg/Ata Yatırım (ayrı)</td><td><span class="pill manual">Manuel</span></td><td class="note">Bu satıra hiç dokunulmadı, kapsam dışı bırakıldı</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>5 · USD BIST-100 &amp; Piyasa Değeri/GSYİH</h2><span class="range">sayfa 25</span></div>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>Alan</th><th>Kaynak</th><th>Durum</th><th>Not</th></tr></thead>
+      <tbody>
+        <tr><td class="title">USD Bazında BIST-100 Endeksi</td><td class="src">Yahoo Finance (XU100.IS ÷ TRY=X) <span class="via">build_endeks_serisi.py</span></td><td><span class="pill auto">Otomatik<span class="yeni">YENİ</span></span></td><td class="note">Bloomberg eklentisi eski yönteme artık hiç gerek yok</td></tr>
+        <tr><td class="title">Piyasa Değeri/GSYİH</td><td class="src">Dosya (2026-07-24'e kadar) + XU100_USD + TCMB EVDS GSYİH</td><td><span class="pill partial">Otomatik (hibrit)<span class="yeni">YENİ</span></span></td><td class="note">2026-07-24 sonrası yaklaşık/orantısal — gerçek USD piyasa değeri hiçbir ücretsiz kaynakta yok</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>6 · Uzun Vadede Borsa İstanbul</h2><span class="range">sayfa 26 · 1989–2026, 38 sütun</span></div>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>Alan</th><th>Kaynak</th><th>Durum</th><th>Not</th></tr></thead>
+      <tbody>
+        <tr><td class="title">1998 – cari yıl</td><td class="src">Yahoo Finance (XU100.IS yıl-sonu kapanışları) <span class="via">guncelle_bist_yillik_getiriler.py</span></td><td><span class="pill auto">Otomatik<span class="yeni">YENİ</span></span></td><td class="note">28/28 kapanmış yıl legacy ile birebir eşleşti</td></tr>
+        <tr><td class="title">1989 – 1997</td><td class="src">Legacy PDF'ten elle transkribe</td><td><span class="pill static">Sabit</span></td><td class="note">Yahoo verisi 1997-07'den başlıyor; kalıcı tarihi veri, dokunmaya gerek yok</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>7 · MSCI Gelişmiş / Gelişmekte Olan Piyasalar</h2><span class="range">sayfa 27 · MXWO vs MXEF</span></div>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>Alan</th><th>Kaynak</th><th>Durum</th><th>Not</th></tr></thead>
+      <tbody>
+        <tr><td class="title">Endeks seviyeleri</td><td class="src">Dosya (son gerçek satıra kadar) + URTH/EEM ETF günlük % değişim <span class="via">build_endeks_serisi.py</span></td><td><span class="pill partial">Otomatik (hibrit)<span class="yeni">YENİ</span></span></td><td class="note">Uzak Bloomberg terminaline artık girmeye gerek yok</td></tr>
+        <tr><td class="title">Son değer etiketleri</td><td class="src">Grafiğin son noktasında, marka renginde</td><td><span class="pill auto">Otomatik<span class="yeni">YENİ</span></span></td><td class="note">Legacy PDF/Excel görünümüyle eşleşiyor</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>8 · Ekler &amp; Kapanış</h2><span class="range">sayfa 28–31</span></div>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>Sayfa</th><th>Alan</th><th>Kaynak</th><th>Durum</th><th>Not</th></tr></thead>
+      <tbody>
+        <tr><td class="title">28</td><td class="src">Fon Avantajları maddeleri</td><td class="src">Fon_Avantajlari_Maddeler</td><td><span class="pill static">Statik</span></td><td class="note">—</td></tr>
+        <tr><td class="title">29</td><td class="src">Vergisel Avantajlar + ANZ tablosu</td><td class="src">Vergi_Bireysel_Fon_Listesi, Vergi_ANZ_Tablosu</td><td><span class="pill static">Statik</span></td><td class="note">Sadece mevzuat değişince</td></tr>
+        <tr><td class="title">30</td><td class="src">Ata Fonları katalog tablosu</td><td class="src">Fon_Katalog</td><td><span class="pill static">Nadiren</span></td><td class="note">Fon eklenince/çıkarılınca, ücret değişince</td></tr>
+        <tr><td class="title">31</td><td class="src">İletişim / ekip kartları</td><td class="src">Ekip</td><td><span class="pill static">Nadiren</span></td><td class="note">—</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>9 · Mimari &amp; proje temizliği</h2><span class="range">tüm proje</span></div>
+    <p class="block-note">Veri otomasyonunun ötesinde, "başka biri devralabilsin" hedefine yönelik yapılanlar — deck'in kendi sayfalarıyla ilgili değil, ama Mete'nin "ne kadar az dosya olursa o kadar iyi" isteğinin doğrudan karşılığı.</p>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>Alan</th><th>Kaynak/Yöntem</th><th>Durum</th><th>Not</th></tr></thead>
+      <tbody>
+        <tr><td class="title">PDF/PPTX export</td><td class="src"><code>npm run export</code> <span class="via">scripts/export-deck.mjs</span></td><td><span class="pill auto">Otomatik<span class="yeni">YENİ</span></span></td><td class="note">Tek komutla ikisi de üretiliyor, <code>Sunum Dosyaları/PDF/{yıl}</code> ve <code>/PowerPoint/{yıl}</code> altına organize</td></tr>
+        <tr><td class="title">C:/Z: mimarisi</td><td class="src">Zamanlanmış senkron (<code>SunumWebAppYedekle</code>)</td><td><span class="pill auto">Doğrulandı<span class="yeni">YENİ</span></span></td><td class="note">Git değil (ekip bilmiyor) — uçtan uca test edildi, npm install+build çalışıyor</td></tr>
+        <tr><td class="title">Sunum.xlsx / MCAP_to_GDP.xlsx / MXWO-MXEF.xlsx</td><td class="src">Donuk veri → <code>sabit_kaynaklar/*.json</code></td><td><span class="pill auto">Silindi<span class="yeni">YENİ</span></span></td><td class="note">35,6MB — koddan tamamen ayrıştırılıp kaldırıldı, hiçbir script artık okumuyor</td></tr>
+        <tr><td class="title">Peer F/K eski script'i</td><td class="src"><code>guncelle_peer_fk.py</code> + Ata Yatırım PDF'i</td><td><span class="pill auto">Silindi<span class="yeni">YENİ</span></span></td><td class="note">MSCI yöntemi tamamen yerini aldığı için kaldırıldı</td></tr>
+        <tr><td class="title">audit/ ve proje kökü</td><td class="src">~30 debug/probe dosyası + 20 eski haftalık PDF</td><td><span class="pill auto">Temizlendi<span class="yeni">YENİ</span></span></td><td class="note">Z: klasörü 152MB → 59MB</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <div class="gaps">
+    <h2 style="margin-bottom:0.9rem;">Eksikler ve Sonraki Adımlar</h2>
+    <p class="block-note" style="margin-top:-0.4rem;">Etki ve aciliyete göre sıralı — yukarıdakiler mimariyi/güveni etkiliyor, aşağıdakiler daha küçük veri-kalitesi cilaları. Mete'nin kararıyla sırayla, tek tek çözülüyor.</p>
+
+    <div class="gap-card p-high" style="opacity:0.6;">
+      <div class="gap-rank">✓</div>
+      <div class="gap-body">
+        <h3>PDF/PPTX export script'i <span class="gap-tag">TAMAMLANDI 07-30</span></h3>
+        <p><code>npm run export</code> — <code>scripts/export-deck.mjs</code>, aynı anda PDF + PPTX üretiyor, legacy dosya adlandırmasıyla, doğrudan proje klasörüne. Detay: <code>Pazartesi_Rutini.md</code> madde 7b.</p>
+      </div>
+    </div>
+
+    <div class="gap-card p-high" style="opacity:0.6;">
+      <div class="gap-rank">✓</div>
+      <div class="gap-body">
+        <h3>C: / Z: mimari konsolidasyonu <span class="gap-tag">TAMAMLANDI 07-30</span></h3>
+        <p>Karar: git değil (ekip GitHub bilmiyor) — kalıcı çözüm zaten var olan <code>SunumWebAppYedekle</code> senkronizasyonu (3x/gün, C:→Z:). Uçtan uca test edildi: Z: kopyası taze bir klasöre kopyalanıp <code>npm install</code> + <code>npm run build</code> çalıştırıldı — ilk kez çalıştırılan <code>npm run build</code> 10 gerçek TypeScript hatası buldu, hepsi düzeltildi. Detay: <code>Pazartesi_Rutini.md</code> madde 15.</p>
+      </div>
+    </div>
+
+    <div class="gap-card p-med">
+      <div class="gap-rank">01</div>
+      <div class="gap-body">
+        <h3>AUM ve fon sayıları hâlâ manuel <span class="gap-tag">sayfa 3</span></h3>
+        <p>Farshad'ın günlük AUM raporu Mete'nin Outlook iş hesabına geliyor — şu an bu hesaba erişimim yok. Bağlanabilirse Sayfa 3 tamamen otomatikleşir.</p>
+        <p class="why"><b>Neden önemli:</b> her hafta dokunulan tek kalan tamamen-manuel alanlardan biri.</p>
+      </div>
+    </div>
+
+    <div class="gap-card p-med" style="opacity:0.6;">
+      <div class="gap-rank">✓</div>
+      <div class="gap-body">
+        <h3>Türkiye CDS grafiği <span class="gap-tag">TAMAMLANDI 07-30</span></h3>
+        <p>Deck'te ilk kez var — <code>worldgovernmentbonds.com</code>'un ücretsiz chart-API'sinden (2015'ten bugüne günlük, gerçek), <code>BBG_Weekly.xlsx</code>'e hiç gerek kalmadan. ANZ sayfasında fiyat grafiğinin yanına Min/Max bantlı mini-grafik olarak eklendi.</p>
+      </div>
+    </div>
+
+    <div class="gap-card p-med" style="opacity:0.6;">
+      <div class="gap-rank">✓</div>
+      <div class="gap-body">
+        <h3>Peer F/K — e-posta bağımlılığı <span class="gap-tag">TAMAMEN ÇÖZÜLDÜ 07-30</span></h3>
+        <p>Önce "isimler PDF'te yok" sorunu yeniden doğrulandı (değişmemiş), sonra Mete "o kısmı otomatiğe bağlayalım mı" diye sordu — MSCI'nin tek-ülke factsheet'leri (World/EM otomasyonuyla aynı desen) bulundu, 9 ülkenin HEM değeri HEM ismi artık otomatik. Ata Yatırım'ın haftalık e-postasına artık hiç gerek yok (eski script yedek olarak duruyor).</p>
+      </div>
+    </div>
+
+    <div class="gap-card p-low" style="opacity:0.6;">
+      <div class="gap-rank">✓</div>
+      <div class="gap-body">
+        <h3>Makro Göstergeler'in EVDS'ye taşınması <span class="gap-tag">ARAŞTIRILDI 07-30 — bilerek ertelendi</span></h3>
+        <p>Fizibilite doğrulandı (EVDS'de TÜFE/ÜFE/Dış Ticaret/Cari İşlemler kategorileri gerçekten var), ama inşa edilmedi — iki gerçek sınırlama bulundu: (1) tablonun asıl haftalık ilgi gören sütunu "2026T" bir TAHMİN, EVDS sadece gerçekleşmiş veri taşıyor, o sütun hiçbir şekilde EVDS'den gelemez. (2) Otomatikleşebilecek tek kısım (2021-2025 gerçekleşen) zaten Mete'nin kendi ifadesiyle "yıllık/çeyreklik güncellendiği için öncelik değil." Efor/değer oranı düşük — Mete tekrar isterse fizibilite hazır, ama şimdilik ertelendi.</p>
+      </div>
+    </div>
+
+    <div class="gap-card p-low" style="opacity:0.6;">
+      <div class="gap-rank">✓</div>
+      <div class="gap-body">
+        <h3>ANZ'nin fiyat grafiği kaynağı <span class="gap-tag">ÇÖZÜLDÜ ve ONAYLANDI 07-30</span></h3>
+        <p>Fon tarafı artık TEFAS'ın kendi resmi NAV verisi (2021-08'den itibaren, öncesi eski kaynak + kalibrasyon) — trailing getiri %22,8, doğrulanmış %23,6'ya çok yakın (eskiden %5,2 idi). Grafiğin şekli değişti (2016-2021 düz, sonrası dik) çünkü eski kaynak fonun tüm geçmişini olduğundan düşük gösteriyormuş — Mete'ye gösterildi, onayladı: "eğer TEFAS'taki doğru ise kesinlikle doğrudur."</p>
+      </div>
+    </div>
+
+    <div class="gap-card p-low" style="opacity:0.6;">
+      <div class="gap-rank">✓</div>
+      <div class="gap-body">
+        <h3>AED "TL Mevduat" tutarsızlığı <span class="gap-tag">ÇÖZÜLDÜ 07-30</span></h3>
+        <p>Borsa İstanbul'un resmi BIST-KYD 1 Aylık Mevduat TL endeksiyle (MEVTL, ücretsiz API) bağımsız çapraz kontrol edildi: %46,6 çıktı — %47,5'e yakın, %57,9'dan uzak. Artık kesin: %47,5 doğru, legacy'nin %57,9'u hatalıydı.</p>
+      </div>
+    </div>
+
+    <div class="gap-card p-low" style="opacity:0.6;">
+      <div class="gap-rank">✓</div>
+      <div class="gap-body">
+        <h3>Rasyonet/EquityRT API'si <span class="gap-tag">TEKRAR ARAŞTIRILDI 07-30 — sonuç değişmedi</span></h3>
+        <p>İki yeni web araması da halka açık teknik dokümantasyon bulamadı — EquityRT'nin "Automated Data Delivery" ürünü ilişki/satış ekibi üzerinden yürüyor, kendi kendine kayıt olunan bir API değil. Tek gerçek sonraki adım: Mete'nin kendi EquityRT hesap yöneticisiyle konuşması — bu benim araştırmamla ilerletebileceğim bir şey değil.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <h3>Bilerek otomatikleştirilmeyenler</h3>
+    <ul>
+      <li><b>Piyasa Senaryoları'nın Kötümser/Baz/İyimser sütunları</b> ve <b>Makro Göstergeler'in analist-tahmini kısımları</b> — bunlar gerçek analist görüşü, veri kaynağı yok.</li>
+      <li><b>Fon açıklama metinleri</b> (<code>Fon_Metinleri</code>) — Mete'nin kararı: "yılda 1-2 kere değişiyor, sorun değil."</li>
+      <li><b>3 Yıl / 5 Yıl / Kuruluştan Beri satırları</b> — sadece AYA ve AAV'de var (kaynakta hazır), diğer 12 fonda hiç yok; Mete'nin kararıyla öncelik değil.</li>
+      <li><b>100 TL Portföy Önerisi</b> ve <b>Ata Fonları katalog tablosu</b> — stratejik/yapısal kararlar, haftalık değil.</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer>
+  Kaynak: <code>Veri_Kaynagi.xlsx</code> ve ilgili <code>guncelle_*.py</code>/<code>build_*.py</code> script'leri, <code>Pazartesi_Rutini.md</code> ile çapraz kontrol edildi. Son güncelleme: 2026-07-30 akşamı.
+</footer>

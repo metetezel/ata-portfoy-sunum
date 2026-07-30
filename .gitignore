@@ -1,0 +1,18 @@
+# Node / Next.js — regenerable, never commit
+ata-portfoy-web/node_modules/
+ata-portfoy-web/.next/
+
+# Python bytecode cache — regenerable
+__pycache__/
+*.pyc
+
+# Weekly PDF/PPTX export output — large binaries that fully change every
+# week, no diff value in git history. Regenerate anytime with `npm run export`.
+Sunum Dosyaları/
+
+# Logs
+*.log
+
+# Claude Code's own local project/session metadata — tooling state, not
+# project content.
+.claude/

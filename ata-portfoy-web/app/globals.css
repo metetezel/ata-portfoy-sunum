@@ -1,0 +1,208 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f5f6f4;
+  --bg-raised: #ffffff;
+  --bg-sunken: #eef0ed;
+  --ink: #16232b;
+  --ink-soft: #4b5a62;
+  --ink-faint: #7c8a90;
+  --line: #dde3e1;
+  --line-strong: #c4cdca;
+  /* Sampled directly from Ata Portföy Logo.png (solid fill pixels, not
+     anti-aliased edges) — the deck's palette matches the logo exactly
+     rather than a "tuned for charts" variant. */
+  --accent: #036a7a;
+  --accent-soft: #e3eef1;
+  --accent-warm: #d77210;
+  /* Third line-chart color, only needed for a fund compared against two
+     benchmarks at once (currently just AED) — reuses the pie charts'
+     already-validated categorical ramp's green (KATEGORIK_LIGHT[2] in
+     PortfoyPastasi.tsx) rather than picking a fresh, unvalidated hue. */
+  --accent-alt: #1baf7a;
+  --good: #0ca30c;
+  --critical: #d03b3b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #10171b;
+    --bg-raised: #172127;
+    --bg-sunken: #0c1215;
+    --ink: #e8ecea;
+    --ink-soft: #a3b3b8;
+    --ink-faint: #71838a;
+    --line: #263139;
+    --line-strong: #354149;
+    --accent: #036a7a;
+    --accent-soft: #16323a;
+    --accent-warm: #d77210;
+    --accent-alt: #1baf7a;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #10171b;
+  --bg-raised: #172127;
+  --bg-sunken: #0c1215;
+  --ink: #e8ecea;
+  --ink-soft: #a3b3b8;
+  --ink-faint: #71838a;
+  --line: #263139;
+  --line-strong: #354149;
+  --accent: #036a7a;
+  --accent-soft: #16323a;
+  --accent-warm: #d77210;
+  --accent-alt: #1baf7a;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-raised: var(--bg-raised);
+  --color-bg-sunken: var(--bg-sunken);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-warm: var(--accent-warm);
+  --color-accent-alt: var(--accent-alt);
+  --color-good: var(--good);
+  --color-critical: var(--critical);
+  --font-display: var(--font-poppins), "Segoe UI", sans-serif;
+  --font-body: var(--font-poppins), "Segoe UI", sans-serif;
+  --font-data: var(--font-poppins), "Segoe UI", sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+.font-display {
+  font-family: var(--font-display);
+  text-wrap: balance;
+}
+
+.font-data {
+  font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Print pages ---------- */
+/* A4-landscape "sayfa" — the actual weekly deliverable. Always white/light,
+   independent of the app's own theme: paper doesn't have a dark mode. */
+
+.sayfa-tuvali {
+  background: var(--bg-sunken);
+  padding: 3rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+}
+
+.sayfa {
+  --bg: #ffffff;
+  --bg-raised: #ffffff;
+  --bg-sunken: #f4f5f3;
+  --ink: #16232b;
+  --ink-soft: #4b5a62;
+  --ink-faint: #7c8a90;
+  --line: #dde3e1;
+  --line-strong: #c4cdca;
+  --accent: #036a7a;
+  --accent-soft: #e3eef1;
+  --accent-warm: #d77210;
+  --accent-alt: #1baf7a;
+  --good: #0ca30c;
+  --critical: #d03b3b;
+
+  width: 297mm;
+  height: 210mm;
+  flex-shrink: 0;
+  background: #ffffff;
+  color: var(--ink);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 28px -8px rgba(15, 25, 30, 0.35);
+  zoom: 0.62;
+  /* Bottom padding clears the logo (bottom:8mm, height:10mm → occupies up to
+     18mm from the edge) with a margin, so tall content can never sit under it. */
+  padding: 9mm 34mm 21mm 12mm;
+  display: flex;
+  flex-direction: column;
+}
+
+.sayfa-kapak-gorseli {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 150mm;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.sayfa-kapak-gorseli-solma {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sayfa-serit {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30mm;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.sayfa-logo {
+  position: absolute;
+  left: 12mm;
+  bottom: 8mm;
+  height: 10mm;
+  width: auto;
+  z-index: 1;
+}
+
+.sayfa-logo.sayfa-logo-kapak {
+  height: 17mm;
+}
+
+.sayfa-icerik {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  z-index: 1;
+}
+
+.sayfa-numara {
+  position: absolute;
+  top: 6mm;
+  right: 30mm;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 17mm;
+  line-height: 1;
+  color: var(--accent);
+  z-index: 1;
+}
+
+@media print {
+  .sayfa-tuvali { background: none; padding: 0; gap: 0; }
+  .sayfa { box-shadow: none; zoom: 1; page-break-after: always; }
+  .app-chrome { display: none; }
+}
+
+@page {
+  size: A4 landscape;
+  margin: 0;
+}
