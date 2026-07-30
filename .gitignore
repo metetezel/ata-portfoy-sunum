@@ -13,6 +13,11 @@ Sunum Dosyaları/
 # Logs
 *.log
 
+# Secrets — never commit. Was accidentally tracked in the initial commit
+# (5f5d4d9); removed 2026-07-30, key needs rotating at EVDS's own site since
+# the old value is still visible in that commit's history on GitHub.
+evds_api_anahtari.txt
+
 # Claude Code's own local project/session metadata — tooling state, not
 # project content.
 .claude/
