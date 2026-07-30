@@ -1,10 +1,13 @@
 @echo off
 cd /d "C:\Users\metete\ata-portfoy-web"
-echo Web sunucusu baslatiliyor...
-echo Hazir olunca tarayicida su adresi acin: http://localhost:3000/sunum
+echo Web sunucusu ayri bir pencerede baslatiliyor...
+start "SUNUM SUNUCUSU - BU PENCEREYI KAPATMAYIN" cmd /k "npm.cmd run dev"
+echo Sunucunun hazir olmasi bekleniyor...
+timeout /t 6 /nobreak >nul
+start "" "http://localhost:3000/sunum"
 echo.
-echo ONEMLI: Bu pencereyi KAPATMAYIN - sunucu bu pencere acikken calisir.
-echo PDF/PowerPoint uretmek icin (3 numarali dosya) bu pencere acik kalmali.
-echo.
-npm run dev
+echo Tarayicida tum sunum (32 sayfa) acildi: http://localhost:3000/sunum
+echo Sunucu "SUNUM SUNUCUSU - BU PENCEREYI KAPATMAYIN" basligindaki ayri
+echo pencerede calisiyor - PDF/PowerPoint uretene kadar o pencereyi kapatma.
+echo Bu pencereyi (bunu) simdi kapatabilirsin.
 pause
