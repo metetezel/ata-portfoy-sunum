@@ -5,6 +5,32 @@ NEDEN öyle çalıştığını, hangi kaynaktan geldiğini merak ediyorsanız
 `Pazartesi_Rutini.md`'ye bakın — bu dosya onun yerine geçmiyor, sadece
 önüne kısa bir özet koyuyor.
 
+## İlk kurulum (yeni bir bilgisayarda, ör. ofis PC'si) — sadece BİR KERE
+
+Proje dosyalarının (kod/veri/script) hepsi Z:'de zaten hazır — hiçbir şey
+eksik olmayacak. Ama bu üçü **PC'nin kendisine** kurulu olmalı, Z:'den
+gelmiyor, her yeni bilgisayarda bir kere yapılması gerekiyor:
+
+1. **Node.js kur** — [nodejs.org](https://nodejs.org)'dan LTS sürümünü indir,
+   normal kur.
+2. **Python kur** — [python.org](https://python.org)'dan indir, kurulum
+   ekranında **"Add python.exe to PATH"** kutusunu işaretlemeyi unutma.
+3. Bir terminal (PowerShell/cmd) aç, şunu çalıştır:
+   ```
+   pip install openpyxl requests pymupdf
+   ```
+4. **`Haftalik Rutin/2 - Web Sunucusunu Baslat.bat`'ı bir kere çalıştır**
+   (bu, Z:'deki kodu yerel diske kopyalayıp `npm install` yapar).
+5. Açılan `%USERPROFILE%\ata-portfoy-web` klasöründe bir terminal açıp
+   BİR KERE şunu çalıştır (PDF/PowerPoint üretimi için gereken tarayıcıyı
+   indirir, ~700MB):
+   ```
+   npx playwright install chromium
+   ```
+
+Bundan sonra o bilgisayarda her zaman normal "Çift tıkla, hazır" akışı
+(aşağıda) 1→2→3 sırasıyla çalışır — bu kurulum adımları tekrar gerekmez.
+
 ## Çift tıkla, hazır (önerilen — terminale gerek yok)
 
 Proje klasöründe **`Haftalik Rutin`** adlı bir alt klasör var
