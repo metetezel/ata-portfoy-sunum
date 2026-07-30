@@ -24,10 +24,6 @@ SIRAYLA cift tikla, hepsi bu.
     Ciktilar nereye kaydedilir: bir ust klasordeki
     "Sunum Dosyalari\PDF\2026\" ve "\PowerPoint\2026\" klasorlerine.
 
-4 - GitHuba Yukle.bat
-    Ne yapar: Kodu ve guncel veriyi GitHub'daki depoya yukler.
-    (metetezel/ata-portfoy-sunum)
-
 Bir sorun cikarsa: bir ust klasordeki BASLANGIC.md ve Pazartesi_Rutini.md
 dosyalarina bakabilir, ya da hata mesajinin ekran goruntusunu
 paylasabilirsin.
