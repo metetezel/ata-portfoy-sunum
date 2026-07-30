@@ -31,6 +31,25 @@ gelmiyor, her yeni bilgisayarda bir kere yapılması gerekiyor:
 Bundan sonra o bilgisayarda her zaman normal "Çift tıkla, hazır" akışı
 (aşağıda) 1→2→3 sırasıyla çalışır — bu kurulum adımları tekrar gerekmez.
 
+## Git bilmeyen bir ekip arkadaşı koda nasıl erişir?
+
+Kod artık kalıcı olarak Z:'de değil, GitHub'da yaşıyor
+(`github.com/metetezel/ata-portfoy-sunum`) — git kurmadan/öğrenmeden de
+erişilebilir:
+
+1. Tarayıcıda `https://github.com/metetezel/ata-portfoy-sunum` adresine git.
+2. Yeşil **"Code"** butonuna tıkla → **"Download ZIP"**.
+3. İnen ZIP'i istediğin bir klasöre çıkart.
+4. Yukarıdaki "İlk kurulum" adımlarını (1-5) bu klasörde aynen uygula —
+   ZIP'ten gelen kopya, Z:'deki gibi sıradan bir klasör, git'e ihtiyaç yok.
+
+⚠️ **Bu bir anlık görüntü, otomatik güncellenmez.** Kod GitHub'da
+değiştikçe bu ZIP kopyası eskir — güncel kalmak için aynı adımları
+(2-3 arası) tekrar edip yeniden indirmek gerekir. Sık sık güncel kalmak
+gereken biri varsa git öğrenmesi ya da **GitHub Desktop** (git bilmeden,
+tek tıkla "güncelle" yapan bir program) kurması Mete'den istenebilir —
+ama tek seferlik/nadiren bakılan erişim için ZIP indirme yeterli.
+
 ## Çift tıkla, hazır (önerilen — terminale gerek yok)
 
 Proje klasöründe **`Haftalik Rutin`** adlı bir alt klasör var
