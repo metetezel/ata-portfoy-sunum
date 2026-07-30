@@ -31,6 +31,22 @@ gelmiyor, her yeni bilgisayarda bir kere yapılması gerekiyor:
 Bundan sonra o bilgisayarda her zaman normal "Çift tıkla, hazır" akışı
 (aşağıda) 1→2→3 sırasıyla çalışır — bu kurulum adımları tekrar gerekmez.
 
+⚠️ **Eğer bilgisayarda yönetici (admin) hakkın yoksa:** normal Node.js/Python
+kurulum dosyaları çoğu zaman "yönetici olarak çalıştırmak istiyor musun?"
+diye bir onay (UAC) penceresi açar — bu onayı verebiliyorsan sorun yok,
+kur ve devam et. Veremiyorsan (IT kısıtlaması vb.) ikisi de admin
+GEREKTİRMEDEN kurulabilir, 2026-07-30'da ofis PC'sinde bu şekilde test
+edildi:
+- **Node.js:** MSI/normal kurulum yerine [nodejs.org/en/download](https://nodejs.org/en/download)'dan
+  "Windows Binary (.zip)" indirilip herhangi bir klasöre (ör.
+  `%USERPROFILE%\devtools\node-...`) çıkartılır, sonra o klasör
+  Ayarlar → Ortam Değişkenleri → Kullanıcı PATH'ine eklenir — kurulum
+  değil, sadece dosya kopyalama, admin istemiyor.
+- **Python:** python.org'un normal `.exe` kurulum dosyası zaten varsayılan
+  olarak admin istemiyor — kurulum ekranında **"Install for all users"
+  kutusunu İŞARETLEME** (varsayılan zaten işaretsiz), "Install Now"
+  yeterli, "Add python.exe to PATH" kutusu işaretli kalsın.
+
 ## Git bilmeyen bir ekip arkadaşı koda nasıl erişir?
 
 Kod artık kalıcı olarak Z:'de değil, GitHub'da yaşıyor
