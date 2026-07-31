@@ -1,7 +1,21 @@
 @echo off
-setlocal
+setlocal enabledelayedexpansion
+rem Yeni kurulan Node.js bazen ayni Windows oturumunda hemen PATH'e yansimaz
+rem (oturum kapat/ac gerekebilir) - bilinen kurulum yerlerini burada da
+rem PATH'e ekliyoruz ki bu beklemeye takilmadan calissin.
+for /d %%D in ("%USERPROFILE%\devtools\node-v*-win-x64") do set "PATH=%%D;!PATH!"
 set "KAYNAK=%~dp0..\ata-portfoy-web"
 set "YEREL=%USERPROFILE%\ata-portfoy-web"
+
+where npm >nul 2>nul
+if not %errorlevel%==0 (
+    echo HATA: npm/node bulunamadi. BASLANGIC.md'deki "Ilk kurulum" bolumunu
+    echo kontrol edin, ya da bilgisayari bir kere yeniden baslatip tekrar
+    echo deneyin - Windows'ta yeni kurulan programlar bazen boyle bir
+    echo yeniden baslatmadan sonra duzgun calisir.
+    pause
+    exit /b 1
+)
 
 echo Guncel kod ve veri Z:'den yerel diske kopyalaniyor...
 robocopy "%KAYNAK%" "%YEREL%" /MIR /XD node_modules .next .git /XF *.log /R:2 /W:2 /NFL /NDL /NP >nul
