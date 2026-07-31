@@ -4,7 +4,11 @@ rem Yeni kurulan Python bazen ayni Windows oturumunda hemen PATH'e yansimaz
 rem (oturum kapat/ac gerekebilir) - bilinen kurulum yerlerini burada da
 rem PATH'e ekliyoruz ki bu beklemeye takilmadan calissin.
 set "PATH=%LOCALAPPDATA%\Programs\Python\Python312;%LOCALAPPDATA%\Programs\Python\Python312\Scripts;%LOCALAPPDATA%\Programs\Python\Launcher;%PATH%"
-cd /d "%~dp0.."
+rem cd /d bir ag paylasiminda (UNC yol, \\...) calismaz - "CMD does not
+rem support UNC paths as current directory" diyip C:\Windows'a duser.
+rem pushd bunun yerine UNC yola gecici bir surucu harfi atar, bu yuzden
+rem bu betik Z: uzerinden cift tiklanarak da calisabiliyor.
+pushd "%~dp0.."
 echo Veri guncelleme basliyor - 21 adim, yaklasik 5-8 dakika surer.
 echo (Ilk calistirmada ANZ adimi ~11 dakika surebilir - TEFAS onbellegi ilk kez
 echo  dolduruluyor. Sonraki haftalardan itibaren ayni adim sadece ~40 saniye surer.)
@@ -26,4 +30,5 @@ echo.
 echo ============================================
 echo Islem tamamlandi. Yukaridaki ozeti kontrol edin.
 echo ============================================
+popd
 pause
