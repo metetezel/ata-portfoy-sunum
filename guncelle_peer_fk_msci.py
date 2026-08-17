@@ -1,8 +1,14 @@
-# Peer_PE_Karsilastirma'nın 9 emsal ülkesinin (Türkiye hariç — o satıra bu
-# script hiç dokunmuyor) 12 ay ileri F/K'sını artık haftalık Ata Yatırım
-# e-postasından DEĞİL, doğrudan MSCI'nin ücretsiz tek-ülke factsheet'lerinden
-# çekiyor. 2026-07-30'da eklendi, Mete'nin "o kısmı da otomatiğe bağlama
-# şansımız var mı" sorusu üzerine.
+# Peer_PE_Karsilastirma'nın 10 ülkesinin (9 emsal + Türkiye) 12 ay ileri
+# F/K'sını artık haftalık Ata Yatırım e-postasından DEĞİL, doğrudan MSCI'nin
+# ücretsiz tek-ülke factsheet'lerinden çekiyor. 2026-07-30'da eklendi,
+# Mete'nin "o kısmı da otomatiğe bağlama şansımız var mı" sorusu üzerine.
+#
+# Türkiye satırı 2026-08-17'ye kadar bu script'in KAPSAMI DIŞINDAYDI (bkz.
+# aşağıdaki eski not) ve elde "0,2" gibi anlamsız/bozuk bir değerle donuk
+# kalmıştı — sayfa 24'ün metnini kontrol ederken fark edildi (gerçek F/K bu
+# kadar düşük olamaz). Diğer 9 ülkeyle AYNI teknikle (msci-turkey-index-
+# usd-net.pdf, ["MSCI","Turkey"] etiketi) MSCI'den çekilip PEER_ULKELER'e
+# eklendi — artık Türkiye de tam otomatik, ayrı bir kaynağa gerek yok.
 #
 # guncelle_peer_fk.py'nin YERİNE GEÇMİYOR, ONU TAMAMLIYOR — eski script hâlâ
 # çalışabilir durumda (Mete PDF'i klasöre bırakmaya devam ederse), ama artık
@@ -44,9 +50,11 @@ AY_ADLARI_KISA = {
 }
 
 # Türkçe görünen ad -> (MSCI factsheet TAM URL'i, MSCI'nin kendi tablo
-# etiketi kelime kelime). Ata Yatırım'ın orijinal grafiğindeki AYNI 9 ülke —
-# sadece kaynak değişti, seçim/kapsam Ata Yatırım'ınkiyle birebir aynı kalsın
-# diye bilerek değiştirilmedi.
+# etiketi kelime kelime). İlk 9'u Ata Yatırım'ın orijinal grafiğindeki AYNI
+# ülkeler — sadece kaynak değişti, seçim/kapsam Ata Yatırım'ınkiyle birebir
+# aynı kalsın diye bilerek değiştirilmedi. Türkiye 2026-08-17'de eklendi
+# (bkz. yukarıdaki not) — grafikte zaten hep vardı, sadece kaynağı otomatik
+# değildi.
 #
 # ⚠️ URL kalıbı ülkeden ülkeye tutarlı DEĞİL — çoğu documents/10199/255599/
 # altında ama Güney Afrika'nın O klasördeki dosyası donuk/eski çıktı (2013
@@ -65,6 +73,7 @@ PEER_ULKELER = {
     # verisi taşıyor) — bu URL'i tekrar denemeyin, aşağıdaki güncel.
     "Güney Afrika": ("https://www.msci.com/resources/factsheets/index_fact_sheet/msci-south-africa-net-usd.pdf", ["MSCI", "South", "Africa"]),
     "Brezilya": ("https://www.msci.com/documents/10199/255599/msci-brazil-index.pdf", ["MSCI", "Brazil"]),
+    "Türkiye": ("https://www.msci.com/documents/10199/255599/msci-turkey-index-usd-net.pdf", ["MSCI", "Turkey"]),
 }
 
 
@@ -157,7 +166,7 @@ def main():
         print(f"  {ulke}: (yeni satır) -> {round(fk, 2)}")
 
     wb.save(VERI_KAYNAGI_YOLU)
-    print(f"OK — Peer_PE_Karsilastirma güncellendi ({len(sonuclar)}/{len(PEER_ULKELER)} ülke). Türkiye satırına dokunulmadı.")
+    print(f"OK — Peer_PE_Karsilastirma güncellendi ({len(sonuclar)}/{len(PEER_ULKELER)} ülke, Türkiye dahil).")
     if hatalar:
         print("UYARI — bazı ülkeler okunamadı:")
         for h in hatalar:

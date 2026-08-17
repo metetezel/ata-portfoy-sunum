@@ -395,13 +395,15 @@ build_tidy_sheet(
 # ---------------------------------------------------------------
 # 7. DEGERLEME_CDS_MSCI
 # ---------------------------------------------------------------
-METRIK_OPTS = ["BIST-100 F/K", "GOP F/K", "Dunya F/K", "Turkiye CDS", "MXWO", "MXEF", "BIST100 Piyasa Degeri/GSYIH"]
+METRIK_OPTS = ["Turkiye F/K", "GOP F/K", "Dunya F/K", "Turkiye CDS", "MXWO", "MXEF", "BIST100 Piyasa Degeri/GSYIH"]
 build_tidy_sheet(
     "Degerleme_CDS_MSCI",
     ["Tarih", "Metrik", "Deger"],
     [12, 28, 12],
     [
-        ("2026-07-27", "BIST-100 F/K", 17.0),
+        # "Turkiye F/K" (eskiden "BIST-100 F/K", CEIC kaynaklı) 2026-08-17'de
+        # MSCI'nin kendi Türkiye endeksine geçti — bkz. guncelle_degerleme_fk.py.
+        ("2026-07-27", "Turkiye F/K", 17.0),
         ("2026-07-27", "GOP F/K", 17.2),
         ("2026-07-27", "Dunya F/K", 22.9),
         ("2026-07-27", "Turkiye CDS", 258),

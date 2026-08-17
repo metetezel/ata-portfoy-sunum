@@ -67,18 +67,24 @@ export default async function SunumSayfasi() {
   const makroGostergeler = getMakroGostergeler();
   const degerlemeMetrikleri = getDegerlemeMetrikleri();
   const metrikDegeri = (ad: string) => degerlemeMetrikleri.find((m) => m.Metrik === ad)?.Deger ?? 0;
-  const bistFK = metrikDegeri("BIST-100 F/K");
+  const turkiyeFK = metrikDegeri("Turkiye F/K");
   const gopFK = metrikDegeri("GOP F/K");
   const dunyaFK = metrikDegeri("Dunya F/K");
-  const iskontoDunya = Math.round((1 - bistFK / dunyaFK) * 100);
-  const iskontoGOP = Math.round((1 - bistFK / gopFK) * 100);
+  const iskontoDunya = Math.round((1 - turkiyeFK / dunyaFK) * 100);
+  const iskontoGOP = Math.round((1 - turkiyeFK / gopFK) * 100);
   const uzunTarih = (t: string | undefined) =>
     t ? new Date(t).toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" }) : "";
-  // Üçü de artık otomatik (guncelle_degerleme_fk.py, 2026-07-30): BIST-100
-  // F/K CEIC Data üzerinden Borsa İstanbul'un kendi verisinden, GOP/Dünya
-  // F/K MSCI'nin resmi (aylık) factsheet'inden. İki ayrı kaynak/tarih
-  // olabileceği için kaynak notu ayrı tutuluyor.
-  const bistTarihUzun = uzunTarih(degerlemeMetrikleri.find((m) => m.Metrik === "BIST-100 F/K")?.Tarih);
+  // Üçü de otomatik (guncelle_degerleme_fk.py). Türkiye F/K DEĞİŞTİ
+  // (2026-08-17, Mete'nin kararı — bkz. Pazartesi_Rutini.md madde 20):
+  // eskiden CEIC'in "BIST-100 F/K"sıydı, artık MSCI'nin kendi Türkiye
+  // ülke endeksi — GOP/Dünya F/K'nın geldiği AYNI World factsheet
+  // metodolojisi, elma-elma kıyas (eskiden iki farklı sağlayıcı arasındaki
+  // ~%7-8'lik bilinen sapma, %2 gibi küçük bir iskonto farkını anlamsız
+  // kılıyordu). Bunun bedeli: artık BIST-100'ün 100 hissesi değil, MSCI'nin
+  // daha dar ~11 büyük şirketlik Türkiye sepeti gösteriliyor — bu yüzden
+  // grafikteki etiket de "BIST -100" değil "Türkiye". İki ayrı PDF/tarih
+  // olabileceği için kaynak notu ayrı tutuluyor (şu an ikisi de aynı gün).
+  const turkiyeTarihUzun = uzunTarih(degerlemeMetrikleri.find((m) => m.Metrik === "Turkiye F/K")?.Tarih);
   const msciTarihUzun = uzunTarih(degerlemeMetrikleri.find((m) => m.Metrik === "Dunya F/K")?.Tarih);
   const peerFK = getPeerPeKarsilastirma();
   const peerTarihUzun = uzunTarih(peerFK.find((p) => p.Tarih)?.Tarih);
@@ -249,12 +255,12 @@ export default async function SunumSayfasi() {
           <div className="grid flex-1 min-h-0 grid-cols-2 gap-10">
             <div className="flex flex-col">
               <h2 className="mb-2 text-center text-sm font-bold leading-snug text-ink">
-                Fiyat/Kazanç Oranlarına göre BIST, GOP ve Dünya Karşılaştırması
+                Fiyat/Kazanç Oranlarına göre Türkiye, GOP ve Dünya Karşılaştırması
               </h2>
               <div className="min-h-0 flex-1">
                 <BasitBarGrafik
                   veri={[
-                    { kategori: "BIST -100", deger: bistFK, renk: "var(--accent-warm)" },
+                    { kategori: "Türkiye", deger: turkiyeFK, renk: "var(--accent-warm)" },
                     { kategori: "GOP", deger: gopFK },
                     { kategori: "Dünya", deger: dunyaFK },
                   ]}
@@ -262,7 +268,7 @@ export default async function SunumSayfasi() {
               </div>
               <p className="mt-1 text-[10px] italic text-ink-faint">*GOP: Gelişmekte Olan Piyasalar</p>
               <p className="text-[10px] italic text-ink-faint">
-                Kaynak: BIST-100 — Borsa İstanbul/CEIC {bistTarihUzun} itibariyle · GOP/Dünya — MSCI {msciTarihUzun} itibariyle
+                Kaynak: MSCI — Türkiye {turkiyeTarihUzun} itibariyle · GOP/Dünya {msciTarihUzun} itibariyle
               </p>
             </div>
             <div className="flex flex-col">

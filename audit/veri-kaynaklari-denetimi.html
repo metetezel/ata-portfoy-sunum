@@ -280,11 +280,10 @@
     <table>
       <thead><tr><th>Alan</th><th>Kaynak</th><th>Durum</th><th>Not</th></tr></thead>
       <tbody>
-        <tr><td class="title">BIST-100 F/K</td><td class="src">CEIC Data <span class="via">guncelle_degerleme_fk.py</span></td><td><span class="pill auto">Otomatik<span class="yeni">YENİ</span></span></td><td class="note">Bloomberg'e en yakın alternatif (18,3 vs 17,0); sayfa şablon değişikliğine kırılgan</td></tr>
+        <tr><td class="title">Türkiye F/K<span class="sub">eskiden "BIST-100 F/K"</span></td><td class="src">MSCI Turkey factsheet (resmi, ücretsiz) <span class="via">guncelle_degerleme_fk.py</span></td><td><span class="pill auto">Otomatik<span class="yeni">YENİ</span></span></td><td class="note">2026-08-17: CEIC'ten (BIST-100, geniş kapsam) MSCI Türkiye endeksine (dar, ~11 şirket) geçti — GOP/Dünya F/K ile AYNI metodoloji, elma-elma kıyas. Eski CEIC rakamı (17,44) GOP'a (17,72) göre anlamsız derecede küçük bir iskonto (%2) veriyordu; MSCI-tutarlı rakamla (10,95) %38'e çıktı.</td></tr>
         <tr><td class="title">GOP F/K, Dünya F/K</td><td class="src">MSCI World factsheet (resmi, ücretsiz) <span class="via">guncelle_degerleme_fk.py</span></td><td><span class="pill auto">Otomatik<span class="yeni">YENİ</span></span></td><td class="note">Tek PDF'te ikisi de var, ayda 1 güncelleniyor</td></tr>
         <tr><td class="title">İskonto % (Dünya/GOP)</td><td class="src">Yukarıdaki üç rakamdan koddan türetilen</td><td><span class="pill auto">Otomatik</span></td><td class="note">Statik değil, her render'da yeniden hesaplanıyor</td></tr>
-        <tr><td class="title">Peer F/K — 9 emsal ülke, değer + isim<span class="sub">Türkiye hariç</span></td><td class="src">MSCI tek-ülke factsheet'leri <span class="via">guncelle_peer_fk_msci.py</span></td><td><span class="pill auto">Otomatik<span class="yeni">YENİ</span></span></td><td class="note">E-postaya artık gerek yok; isimler de artık otomatik (eskiden manuel taşınıyordu)</td></tr>
-        <tr><td class="title">Peer F/K — Türkiye satırı</td><td class="src">Bloomberg/Ata Yatırım (ayrı)</td><td><span class="pill manual">Manuel</span></td><td class="note">Bu satıra hiç dokunulmadı, kapsam dışı bırakıldı</td></tr>
+        <tr><td class="title">Peer F/K — 10 ülke (9 emsal + Türkiye), değer + isim</td><td class="src">MSCI tek-ülke factsheet'leri <span class="via">guncelle_peer_fk_msci.py</span></td><td><span class="pill auto">Otomatik<span class="yeni">YENİ</span></span></td><td class="note">E-postaya artık gerek yok; isimler de artık otomatik. Türkiye satırı 2026-08-17'de eklendi — eskiden ayrı/manuel bırakılmıştı ve "0,2" gibi bozuk bir değerle donuk kalmıştı, şimdi diğer 9 ülkeyle aynı otomatik akışta (6,69)</td></tr>
       </tbody>
     </table>
     </div>
