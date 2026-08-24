@@ -132,8 +132,8 @@ export default async function SunumSayfasi() {
       <Sayfa numara={2}>
         <div className="flex h-full flex-col justify-center">
           <h1 className="mb-8 font-display text-2xl font-bold leading-snug text-ink">
-            Ata Portföy Yönetimi <span className="text-accent">{kapakOzet?.AUM_Milyar_TL}</span> milyar TL ve{" "}
-            {kapakOzet?.Yatirim_Fon_Sayisi} yatırım fonu ve {kapakOzet?.Serbest_Fon_Sayisi} serbest fon ve olmak
+            Ata Portföy Yönetimi <span className="text-accent">{kapakOzet?.AUM_Milyar_TL}</span> milyar TL büyüklüğünde,{" "}
+            {kapakOzet?.Yatirim_Fon_Sayisi} yatırım fonu ve {kapakOzet?.Serbest_Fon_Sayisi} serbest fon olmak
             üzere toplam <span className="text-accent-warm">{toplamFonSayisi}</span> adet fon yönetmektedir.
           </h1>
           <div className="flex items-stretch justify-center gap-10">
