@@ -708,7 +708,6 @@ ekip = [
     ("Etem Öztekin", "CEO, Yönetim Kurulu Üyesi", "0212 310 63 85", "etem.oztekin@ataportfoy.com.tr"),
     ("Şebnem Kaya", "Genel Müdür Yardımcısı", "0212 310 63 75", "skaya@ataportfoy.com.tr"),
     ("Funda Sevgi Tunal", "Direktör", "0212 310 60 21", "funda.tunal@ataportfoy.com.tr"),
-    ("Bade Miray Süngü", "Müdür Yardımcısı", "0212 310 60 38", "bade.sungu@ataportfoy.com.tr"),
 ]
 for r, row_data in enumerate(ekip, start=2):
     for c, val in enumerate(row_data, start=1):
@@ -739,7 +738,6 @@ ekip_organizasyon = [
     ("Fon Yönetimi", "Araştırma", "Batuhan Demirci", ""),
     ("Fon Yönetimi", "Varlık Yönetimi ve Yatırım Danışmanlığı", "Şebnem Kaya", ""),
     ("Fon Yönetimi", "Varlık Yönetimi ve Yatırım Danışmanlığı", "Funda Sevgi Tunal", ""),
-    ("Fon Yönetimi", "Varlık Yönetimi ve Yatırım Danışmanlığı", "Bade Miray Süngü", ""),
     ("Fon Yönetimi", "Varlık Yönetimi ve Yatırım Danışmanlığı", "Mete Tezel", ""),
     ("Fon Operasyon", "Fon Operasyon", "Niyazi Takmaz", ""),
     ("Fon Operasyon", "Fon Operasyon", "Güney Özütutar", ""),
