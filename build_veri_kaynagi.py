@@ -705,8 +705,7 @@ for c, h in enumerate(headers, start=1):
     ws.cell(row=1, column=c, value=h)
 style_header(ws, 1, len(headers))
 ekip = [
-    ("Batuhan Özşahin", "Co - CEO, CIO", "0212 310 63 92", "batuhan.ozsahin@ataportfoy.com.tr"),
-    ("Etem Öztekin", "Co - CEO, Yönetim Kurulu Üyesi", "0212 310 63 85", "etem.oztekin@ataportfoy.com.tr"),
+    ("Etem Öztekin", "CEO, Yönetim Kurulu Üyesi", "0212 310 63 85", "etem.oztekin@ataportfoy.com.tr"),
     ("Şebnem Kaya", "Genel Müdür Yardımcısı", "0212 310 63 75", "skaya@ataportfoy.com.tr"),
     ("Funda Sevgi Tunal", "Direktör", "0212 310 60 21", "funda.tunal@ataportfoy.com.tr"),
     ("Bade Miray Süngü", "Müdür Yardımcısı", "0212 310 60 38", "bade.sungu@ataportfoy.com.tr"),
@@ -731,14 +730,12 @@ style_header(ws, 1, len(headers))
 # Bolum left blank = shown as card-top leadership (bold name + title beneath),
 # not as a department section.
 ekip_organizasyon = [
-    ("Fon Yönetimi", "", "Batuhan Özşahin", "Co-CEO, CIO"),
-    ("Fon Yönetimi", "", "Etem Öztekin", "Co-CEO, Board Member"),
-    ("Fon Yönetimi", "Fon Yöneticileri", "Batuhan Özşahin", ""),
+    ("Fon Yönetimi", "", "Etem Öztekin", "CEO, Board Member"),
     ("Fon Yönetimi", "Fon Yöneticileri", "Suna Tanrıverdi Fidan", ""),
     ("Fon Yönetimi", "Fon Yöneticileri", "Farshad Mirzazadeh, CFA", ""),
     ("Fon Yönetimi", "Fon Yöneticileri", "Samet Zağlı", ""),
     ("Fon Yönetimi", "Portföy Yöneticisi Yardımcıları", "Berk Tuna Subaşı", ""),
-    ("Fon Yönetimi", "Araştırma", "Elmas Öztürk", ""),
+    ("Fon Yönetimi", "Portföy Yöneticisi Yardımcıları", "Elmas Öztürk", ""),
     ("Fon Yönetimi", "Araştırma", "Batuhan Demirci", ""),
     ("Fon Yönetimi", "Varlık Yönetimi ve Yatırım Danışmanlığı", "Şebnem Kaya", ""),
     ("Fon Yönetimi", "Varlık Yönetimi ve Yatırım Danışmanlığı", "Funda Sevgi Tunal", ""),
