@@ -31,3 +31,7 @@ npm run dev
 
 `Veri_Kaynagi.xlsx` varsayılan olarak `\\atafiles\Ata.Portföy\...` ağ paylaşımından okunur — farklı bir konumdan
 okumak için `SUNUM_KAYNAK_KLASORU` ortam değişkenini bu repo'nun kök klasörüne ayarlayın.
+
+---
+
+Bu projenin kurgusu ve arkasındaki kararlar: <https://metetezel.com>
