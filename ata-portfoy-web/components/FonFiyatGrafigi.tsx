@@ -109,6 +109,7 @@ export function FonFiyatGrafigi({
   endekslenmis = true,
   sonDegerEtiketleriGoster = false,
   sonDegerOndalik = 1,
+  benchmarkIkinciEksen = false,
 }: {
   veri: FiyatNoktasi[];
   fonAdi: string;
@@ -129,11 +130,21 @@ export function FonFiyatGrafigi({
   // sayfalarının görünümü değişmesin diye.
   sonDegerEtiketleriGoster?: boolean;
   sonDegerOndalik?: number;
+  // ANZ'ye özel (2026-08-31, Mete'nin "grafik çok saçma görünüyor" tespiti
+  // üzerine): fon 10 yılda 100'den 772'ye çıkarken benchmark'ı (KYD USD
+  // Mevduat, düz bir USD mevduat faizi) sadece 100'den 121'e çıkıyor — tek
+  // eksen paylaşıldığında benchmark çizgisi grafiğin sadece ~%2,5'ini
+  // kaplayıp dibe yapışık düz bir çizgi gibi görünüyordu, karşılaştırma
+  // anlamsızlaşıyordu. Benchmark'a kendi sağ eksenini vermek, iki serinin
+  // KENDİ ölçeğinde gerçek hareketini görünür kılıyor. Varsayılan kapalı —
+  // diğer 12 fon sayfasının zaten onaylanmış görünümünü değiştirmesin diye.
+  benchmarkIkinciEksen?: boolean;
 }) {
   const gosterilecek = veri.map((v) => ({ ...v, tarihEtiket: fmtTarih(v.tarih) }));
   const sonIndex = gosterilecek.length - 1;
   const benchmarkVar = !!benchmarkAdi && veri.some((v) => v.benchmark != null);
   const benchmark2Var = !!benchmark2Adi && veri.some((v) => v.benchmark2 != null);
+  const ikinciEksenAktif = benchmarkIkinciEksen && benchmarkVar;
 
   // Recharts' own auto-domain tends to anchor the axis at a round number
   // near 0, which flattens a fund's real swings compared to the legacy
@@ -141,11 +152,26 @@ export function FonFiyatGrafigi({
   // 0-220) — computing an explicit padded domain from the actual data
   // keeps the visual drama the legacy charts have instead of an
   // auto-picked "nice" range that wastes most of the chart on empty space.
-  const degerler = gosterilecek.flatMap((v) => [v.fon, v.benchmark, v.benchmark2]).filter((d): d is number => d != null);
-  const veriMin = Math.min(...degerler);
-  const veriMax = Math.max(...degerler);
-  const pay = (veriMax - veriMin) * 0.1;
-  const yEkseniAraligi: [number, number] = [Math.max(0, Math.floor(veriMin - pay)), Math.ceil(veriMax + pay)];
+  //
+  // When benchmarkIkinciEksen is on, the benchmark gets its OWN domain off
+  // its own min/max instead of being folded into the fund's — that's the
+  // whole point of the second axis (see prop comment above).
+  const solDegerler = gosterilecek
+    .flatMap((v) => [v.fon, ikinciEksenAktif ? null : v.benchmark, v.benchmark2])
+    .filter((d): d is number => d != null);
+  const solMin = Math.min(...solDegerler);
+  const solMax = Math.max(...solDegerler);
+  const solPay = (solMax - solMin) * 0.1;
+  const yEkseniAraligi: [number, number] = [Math.max(0, Math.floor(solMin - solPay)), Math.ceil(solMax + solPay)];
+
+  const benchmarkDegerler = gosterilecek.map((v) => v.benchmark).filter((d): d is number => d != null);
+  const benchmarkMin = benchmarkDegerler.length ? Math.min(...benchmarkDegerler) : 0;
+  const benchmarkMax = benchmarkDegerler.length ? Math.max(...benchmarkDegerler) : 0;
+  const benchmarkPay = (benchmarkMax - benchmarkMin) * 0.1;
+  const sagEksenAraligi: [number, number] = [
+    Math.max(0, Math.floor(benchmarkMin - benchmarkPay)),
+    Math.ceil(benchmarkMax + benchmarkPay),
+  ];
 
   // Each line is indexed to 100 from its own start (not a shared date) — the
   // fund's own history commonly runs years ahead of its benchmark's, since
@@ -172,12 +198,24 @@ export function FonFiyatGrafigi({
               minTickGap={40}
             />
             <YAxis
+              yAxisId="sol"
               tick={{ fill: "var(--ink-faint)", fontSize: 11 }}
               axisLine={false}
               tickLine={false}
               width={44}
               domain={yEkseniAraligi}
             />
+            {ikinciEksenAktif && (
+              <YAxis
+                yAxisId="sag"
+                orientation="right"
+                tick={{ fill: "var(--accent-warm)", fontSize: 11 }}
+                axisLine={false}
+                tickLine={false}
+                width={44}
+                domain={sagEksenAraligi}
+              />
+            )}
             <Tooltip content={<CustomTooltip fonAdi={fonAdi} benchmarkAdi={benchmarkAdi} benchmark2Adi={benchmark2Adi} />} />
             {(benchmarkVar || benchmark2Var) && (
               <Legend
@@ -191,6 +229,7 @@ export function FonFiyatGrafigi({
               />
             )}
             <Line
+              yAxisId="sol"
               type="monotone"
               dataKey="fon"
               name="fon"
@@ -203,6 +242,7 @@ export function FonFiyatGrafigi({
             />
             {benchmarkVar && (
               <Line
+                yAxisId={ikinciEksenAktif ? "sag" : "sol"}
                 type="monotone"
                 dataKey="benchmark"
                 name="benchmark"
@@ -216,6 +256,7 @@ export function FonFiyatGrafigi({
             )}
             {benchmark2Var && (
               <Line
+                yAxisId="sol"
                 type="monotone"
                 dataKey="benchmark2"
                 name="benchmark2"

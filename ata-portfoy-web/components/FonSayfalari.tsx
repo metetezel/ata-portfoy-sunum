@@ -168,6 +168,7 @@ export async function FonSayfalari({
                     fonAdi={katalog.Fon_Kodu}
                     benchmarkAdi={benchmarkKisaAd}
                     benchmark2Adi={benchmark2KisaAd}
+                    benchmarkIkinciEksen={kod === "ANZ"}
                   />
                 </div>
               </div>
