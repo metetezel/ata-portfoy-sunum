@@ -30,7 +30,7 @@ ADIMLAR = [
     ("Ata Fonları: Güçlü Performans grafikleri (Sayfa 4-5)", ["guncelle_fon_performans_ozet.py"]),
     ("Fon portföy dağılımları, TEFAS", ["guncelle_fon_portfoy_dagilimi.py"]),
     ("Piyasa Tahminleri: Mevcut Durum (Sayfa 7)", ["guncelle_piyasa_verileri.py"]),
-    ("F/K üçlüsü: Türkiye / GOP / Dünya (Sayfa 24)", ["guncelle_degerleme_fk.py"]),
+    ("F/K üçlüsü (Türkiye/GOP/Dünya) + Türkiye CDS (Sayfa 24, Degerleme_CDS_MSCI)", ["guncelle_degerleme_fk.py"]),
     ("Peer F/K: 10 ülke, Türkiye dahil (Sayfa 24)", ["guncelle_peer_fk_msci.py"]),
     ("Uzun Vadede BIST yıllık getiriler (Sayfa 26)", ["guncelle_bist_yillik_getiriler.py"]),
     ("Endeks serileri: USD BIST-100, MCAP/GDP, MXWO/MXEF, Türkiye CDS (Sayfa 25-27, ANZ)", ["build_endeks_serisi.py"]),

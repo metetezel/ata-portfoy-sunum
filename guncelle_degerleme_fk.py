@@ -1,7 +1,15 @@
-# Degerleme_CDS_MSCI sekmesindeki "Turkiye F/K", "GOP F/K" ve "Dunya F/K"
-# satırlarını otomatik günceller. "Turkiye CDS" satırına BURADA DOKUNULMUYOR —
-# o hâlâ manuel/Bloomberg kaynaklı (bkz. Pazartesi_Rutini.md madde 10, CDS için
-# BBG_Weekly.xlsx'in Mete tarafından yenilenmesi bekleniyor).
+# Degerleme_CDS_MSCI sekmesindeki "Turkiye F/K", "GOP F/K", "Dunya F/K" ve
+# "Turkiye CDS" satırlarını otomatik günceller.
+#
+# "Turkiye CDS" (DEĞİŞTİ 2026-08-31 — eskiden Mete'nin BBG_Weekly.xlsx'ini
+# elle yenilemesine bağlıydı, bkz. Pazartesi_Rutini.md madde 10, ve 07-27'den
+# beri hiç dokunulmamış/bayat kalmıştı): artık build_endeks_serisi.py'nin
+# ANZ sayfasının CDS mini-grafiği için zaten kullandığı aynı ücretsiz,
+# günlük worldgovernmentbonds.com kaynağından (turkiye_cds_serisi())
+# besleniyor — ayrı bir manuel adım gerekmiyor. Not: bu satır şu an web
+# deck'inin hiçbir sayfasında fiilen gösterilmiyor (Sayfa 24 sadece F/K
+# üçlüsünü kullanıyor) — sadece kaynak sekmeyi güncel tutmak için yapılıyor,
+# Mete'nin 2026-08-31 tarihli açık isteği üzerine.
 #
 # Turkiye F/K kaynağı (DEĞİŞTİ 2026-08-17 — eskiden "BIST-100 F/K" adıyla
 # CEIC'ten geliyordu, bkz. Pazartesi_Rutini.md madde 20): Sayfa 24'ün
@@ -50,6 +58,8 @@ import re
 import fitz
 import openpyxl
 import requests
+
+from build_endeks_serisi import turkiye_cds_serisi
 
 VERI_KAYNAGI_YOLU = os.path.join(os.path.dirname(__file__), "Veri_Kaynagi.xlsx")
 MSCI_WORLD_PDF_URL = "https://www.msci.com/documents/10199/255599/msci-world-index.pdf"
@@ -171,6 +181,13 @@ def main():
     except Exception as e:
         hatalar.append(f"MSCI Türkiye factsheet okuma hatası (Turkiye F/K güncellenmedi): {e}")
 
+    try:
+        cds_pencere, _cds_istatistik = turkiye_cds_serisi()
+        cds_son_tarih = max(cds_pencere)
+        hedefler["Turkiye CDS"] = (cds_son_tarih.isoformat(), cds_pencere[cds_son_tarih])
+    except Exception as e:
+        hatalar.append(f"worldgovernmentbonds.com CDS okuma hatası (Turkiye CDS güncellenmedi): {e}")
+
     wb = openpyxl.load_workbook(VERI_KAYNAGI_YOLU)
     ws = wb["Degerleme_CDS_MSCI"]
 
@@ -198,7 +215,6 @@ def main():
 
     wb.save(VERI_KAYNAGI_YOLU)
     print("OK — Degerleme_CDS_MSCI güncellendi.")
-    print("NOT: Turkiye CDS bu script tarafından değiştirilmedi, hâlâ manuel.")
     if hatalar:
         print("UYARI — bazı kaynaklar okunamadı:")
         for h in hatalar:
