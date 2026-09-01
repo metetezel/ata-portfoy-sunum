@@ -482,7 +482,7 @@ export default async function SunumSayfasi() {
                     </th>
                     <th className="border border-line-strong bg-accent-warm px-2 py-1 font-bold text-white break-words">Döviz Mevduatında</th>
                     <th className="border border-line-strong bg-accent-warm px-2 py-1 font-bold text-white break-words">
-                      Eurobond Alım/Satımında ve Faiz(Kupon)/İtfa Gelirinde
+                      Eurobond Alım/Satımında ve Faiz (Kupon)/İtfa Gelirinde
                     </th>
                     <th className="border border-line-strong bg-accent-warm px-2 py-1 font-bold text-white break-words">Eurobond Fonu Alırsa</th>
                   </tr>

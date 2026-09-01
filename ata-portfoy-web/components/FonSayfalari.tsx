@@ -224,8 +224,8 @@ export async function FonSayfalari({
             <p className="mb-6 text-xs text-ink-faint">{katalog.Fon_Kodu}</p>
             <div className="grid flex-1 grid-cols-2 gap-8 items-center">
               {[
-                { donem: "Son 5 Yil", yil: 5 },
-                { donem: "Son 3 Yil", yil: 3 },
+                { donem: "Son 5 Yıl", yil: 5 },
+                { donem: "Son 3 Yıl", yil: 3 },
               ].map(({ donem, yil }) => (
                 <YillikGetiriBarGrafik
                   key={donem}
