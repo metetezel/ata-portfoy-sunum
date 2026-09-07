@@ -353,8 +353,8 @@ def main():
         # currency change cancels out most of whatever caused that gap.
         karsilastirma_yeni = []
         for yil_sayisi, donem_adi, kum_fon, kum_bench, usd_degisim in [
-            (3, "Son 3 Yil", uc_yil_v, bench_uc_yil_v, usd_3yil_degisim),
-            (5, "Son 5 Yil", bes_yil_v, bench_bes_yil_v, usd_5yil_degisim),
+            (3, "Son 3 Yıl", uc_yil_v, bench_uc_yil_v, usd_3yil_degisim),
+            (5, "Son 5 Yıl", bes_yil_v, bench_bes_yil_v, usd_5yil_degisim),
         ]:
             if kum_fon is None:
                 continue
