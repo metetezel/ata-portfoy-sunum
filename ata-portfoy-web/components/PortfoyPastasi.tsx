@@ -54,8 +54,15 @@ export function PortfoyPastasi({
   // followed the pie on the page (here, the CDS mini-chart below it).
   // Estimating 2 lines for any name+percent long enough to plausibly wrap,
   // instead of assuming every category is exactly 1 line.
-  const legendSatirYuksekligi = 15;
   const satirSayisi = data.reduce((toplam, d) => toplam + (d.name.length > 20 ? 2 : 1), 0);
+  // A portfolio with MANY categories (DGH: 8, 11 counted lines) grows this
+  // box tall enough on its own to squeeze the price-comparison chart below
+  // it on the fund page down to near-zero height (found 2026-10-05, DGH) —
+  // same class of bug as the Fon Hakkında paragraph's length threshold
+  // above, just triggered by category count instead of description length.
+  // Past a line-count threshold, shrink the legend rows/font the same way.
+  const yogunLejant = satirSayisi > 6;
+  const legendSatirYuksekligi = yogunLejant ? 11 : 15;
   const minCizimYuksekligi = 70;
   const efektifYukseklik = Math.max(yukseklik, minCizimYuksekligi + satirSayisi * legendSatirYuksekligi);
 
@@ -107,7 +114,7 @@ export function PortfoyPastasi({
               formatter={(value, entry) => {
                 const yuzde = (entry?.payload as unknown as { value?: number })?.value;
                 return (
-                  <span className="text-xs text-ink-soft">
+                  <span className={`${yogunLejant ? "text-[10px]" : "text-xs"} text-ink-soft`}>
                     {value}
                     {yuzde !== undefined ? ` — ${yuzde}%` : ""}
                   </span>
