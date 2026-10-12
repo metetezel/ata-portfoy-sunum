@@ -48,7 +48,7 @@ export function FonlarPerformansBarGrafik({ satirlar }: { satirlar: FonPerforman
           <YAxis
             type="category"
             dataKey="ad"
-            width={230}
+            width={290}
             interval={0}
             tick={{ fill: "var(--ink)", fontSize: 11, fontWeight: 600 }}
             axisLine={false}
