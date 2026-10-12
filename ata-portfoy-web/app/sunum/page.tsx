@@ -208,7 +208,7 @@ export default async function SunumSayfasi() {
 
       <Sayfa numara={7}>
         <div className="flex h-full flex-col justify-center">
-          <h1 className="mb-4 font-display text-2xl font-bold text-ink">2026-2027 Piyasa ve Makro Tahminleri</h1>
+          <h1 className="mb-4 font-display text-2xl font-bold text-ink">2026 Piyasa ve Makro Tahminleri</h1>
           <MakroGostergelerTablosu satirlar={makroGostergeler} />
         </div>
       </Sayfa>

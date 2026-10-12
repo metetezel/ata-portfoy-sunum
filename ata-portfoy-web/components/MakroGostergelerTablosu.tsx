@@ -62,9 +62,7 @@ export function MakroGostergelerTablosu({ satirlar }: { satirlar: MakroGostergeS
   // helper convention) — never let a non-numeric Yil leak into the column set.
   const gecerliSatirlar = satirlar.filter((s) => typeof s.Yil === "number" && !Number.isNaN(s.Yil));
   const yillar = [...new Set(gecerliSatirlar.map((s) => s.Yil))].sort((a, b) => a - b);
-  // Ata Yatırım's source table carries two forecast years (e.g. 2026T, 2027T),
-  // so the last two columns are the estimates.
-  const tahminYillari = new Set(yillar.slice(-2));
+  const sonYil = yillar[yillar.length - 1];
 
   return (
     <div className="flex flex-col gap-2">
@@ -77,7 +75,7 @@ export function MakroGostergelerTablosu({ satirlar }: { satirlar: MakroGostergeS
               </th>
               {yillar.map((yil) => (
                 <th key={yil} className="px-3 py-1.5 text-right font-data text-xs font-semibold">
-                  {tahminYillari.has(yil) ? `${yil}T` : yil}
+                  {yil === sonYil ? `${yil}T` : yil}
                 </th>
               ))}
             </tr>
