@@ -850,8 +850,8 @@ for c, h in enumerate(headers, start=1):
 style_header(ws, 1, len(headers))
 yatirim_100tl_dagilim = [
     ("Altın", 10),
-    ("TL Sabit Getiri", 40),
-    ("Türk Hisse Senedi", 35),
+    ("TL Sabit Getiri", 45),
+    ("Türk Hisse Senedi", 30),
     ("Global Tematik Hisse Fonlar", 15),
 ]
 for r, row_data in enumerate(yatirim_100tl_dagilim, start=2):
@@ -875,10 +875,10 @@ for c, h in enumerate(headers, start=1):
     ws.cell(row=1, column=c, value=h)
 style_header(ws, 1, len(headers))
 yatirim_100tl_maddeler = [
-    (1, "Cazip değerleme oranları ve enflasyon üstü değer artışı potansiyeli nedeniyle hisse senetlerine", 35),
+    (1, "Cazip değerleme oranları ve enflasyon üstü değer artışı potansiyeli nedeniyle hisse senetlerine", 30),
     (2, "Enflasyon ve cari açık beklentilerinin bozulmasının TL üzerinde yarattığı baskı nedeniyle altına", 10),
     (3, "Küresel piyasalarda tarım, gıda, teknoloji, havacılık ve savunma temalarına yatırım yapan tematik fonlara", 15),
-    (4, "Cazip oranlardan dolayı kısa vadeli TL faize", 40),
+    (4, "Cazip oranlardan dolayı kısa vadeli TL faize", 45),
 ]
 for r, row_data in enumerate(yatirim_100tl_maddeler, start=2):
     for c, val in enumerate(row_data, start=1):
