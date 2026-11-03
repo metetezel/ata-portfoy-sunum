@@ -129,6 +129,29 @@ Her ikisi de otomatik oluşur: `Sunum Dosyaları\PDF\2026\` ve
 `Sunum Dosyaları\PowerPoint\2026\` altına, legacy adlandırmayla
 (`Ata Portföy Sunum - {gün} {ay} {yıl}`).
 
+## Lisans kilidi (GitHub açma/kapama dosyası)
+
+Veri script'leri ve web sunumu, her açılışta GitHub'daki küçük bir public
+dosyayı okur:
+`https://github.com/metetezel/ata-portfoy-lisans/blob/main/durum.json`
+
+- `{"aktif": true}` → her şey normal çalışır.
+- `{"aktif": false}` yazılırsa, ya da `ata-portfoy-lisans` reposu private
+  yapılır/silinirse → tüm kopyalar en geç ~15 dk içinde durur (script'ler
+  "ÇALIŞMA DURDURULDU" der, sunum "Sunum kilitli" ekranı gösterir).
+- İnternet/GitHub'a ulaşılamıyorsa: son başarılı kontrol 7 günden yeniyse
+  uyarıyla çalışmaya devam eder, değilse durur.
+- Ana repo (`ata-portfoy-sunum`) private olsa da olmasa da kilidi etkilemez.
+
+Dosyayı düzenlemek için:
+`https://github.com/metetezel/ata-portfoy-lisans/edit/main/durum.json` →
+içeriği değiştir → **Commit changes**. GitHub'ın önbelleği yüzünden
+değişikliğin yansıması birkaç dakika sürebilir.
+
+Kod: `lisans_kontrol.py` (Python) ve `ata-portfoy-web/lib/lisansKontrol.ts`
+(web) — aynı adresi kullanırlar, biri değişirse diğeri de değişmeli. Son
+başarılı kontrolün zamanı `%LOCALAPPDATA%\AtaPortfoySunum\` altında tutulur.
+
 ## Bir şey bozulursa
 
 `Pazartesi_Rutini.md` her script'in ne yaptığını, hangi kaynaktan

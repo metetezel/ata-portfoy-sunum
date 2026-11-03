@@ -107,6 +107,8 @@ def mxwo_mxef_dondur():
 
 
 if __name__ == "__main__":
+    from lisans_kontrol import kontrol_et
+    kontrol_et()
     anz_eurobond_dondur()
     mcap_gdp_dondur()
     mxwo_mxef_dondur()

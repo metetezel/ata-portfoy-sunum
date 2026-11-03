@@ -597,6 +597,8 @@ def build(fon_kodu):
 
 
 if __name__ == "__main__":
+    from lisans_kontrol import kontrol_et
+    kontrol_et()
     import sys
     kod = sys.argv[1].upper() if len(sys.argv) > 1 else "AYA"
     build(kod)

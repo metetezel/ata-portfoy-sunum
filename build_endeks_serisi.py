@@ -353,6 +353,8 @@ def yaz(isim, seri, istatistik):
 
 
 if __name__ == "__main__":
+    from lisans_kontrol import kontrol_et
+    kontrol_et()
     seri1, ist1 = bist100_usd_endeksi()
     yaz("bist100_usd_endeksi", seri1, ist1)
 

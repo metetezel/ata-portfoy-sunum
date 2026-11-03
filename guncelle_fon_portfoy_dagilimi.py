@@ -162,4 +162,6 @@ def main():
 
 
 if __name__ == "__main__":
+    from lisans_kontrol import kontrol_et
+    kontrol_et()
     main()
