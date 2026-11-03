@@ -21,3 +21,6 @@ evds_api_anahtari.txt
 # Claude Code's own local project/session metadata — tooling state, not
 # project content.
 .claude/
+
+# Ata Yatirim makro tahmin raporlari — kurum ici kaynak, repoya girmez.
+Macroforecasts*.xlsx
