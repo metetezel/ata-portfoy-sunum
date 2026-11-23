@@ -10,8 +10,8 @@
 #     kayıt gerekmiyor) — https://www.tcmb.gov.tr/kurlar/today.xml. Döviz
 #     Alış/Satış ortalaması "kur" olarak kullanılıyor.
 #   - BIST100 Endeksi, S&P 500 Endeksi, Euro Stoxx 50 Endeksi: Yahoo Finance
-#     chart endpoint'i, her enstrümanın kendi `chartPreviousClose` alanı
-#     (bir önceki tamamlanmış seansın kapanışı) — Bloomberg terminaline
+#     chart endpoint'inin günlük serisinden son tamamlanmış seansın
+#     kapanışı — Bloomberg terminaline
 #     ihtiyaç duymadan "önceki kapanış" için en yakın karşılık.
 #
 # Bilinen sınırlama (Mete'ye bildirildi, 2026-07-29'da kabul edildi): bu
@@ -69,7 +69,23 @@ def yahoo_onceki_kapanisi_oku(sembol):
     url = f"https://query1.finance.yahoo.com/v8/finance/chart/{sembol}"
     r = requests.get(url, params={"range": "5d", "interval": "1d"}, headers={"User-Agent": TARAYICI_UA}, timeout=10)
     r.raise_for_status()
-    return r.json()["chart"]["result"][0]["meta"]["chartPreviousClose"]
+    # meta.chartPreviousClose KULLANILMIYOR: o alan "dünkü kapanış" değil,
+    # istenen aralığın (5 gün) BAŞLAMASINDAN önceki kapanış — tabloyu yaklaşık
+    # bir hafta geriden gösteriyordu (2026-11-23'te bulundu: S&P 7.562 yerine
+    # gerçek son kapanış 6.910). Bunun yerine günlük seriden, borsanın kendi
+    # saatine göre bugünden önceki son dolu kapanış alınıyor.
+    sonuc = r.json()["chart"]["result"][0]
+    ofset = datetime.timedelta(seconds=sonuc["meta"].get("gmtoffset", 0))
+    utc = datetime.timezone.utc
+    bugun = (datetime.datetime.now(utc) + ofset).date()
+    kapanislar = [
+        k
+        for t, k in zip(sonuc["timestamp"], sonuc["indicators"]["quote"][0]["close"])
+        if k is not None and (datetime.datetime.fromtimestamp(t, utc) + ofset).date() < bugun
+    ]
+    if not kapanislar:
+        raise ValueError("tamamlanmış seans kapanışı bulunamadı")
+    return kapanislar[-1]
 
 
 def main():

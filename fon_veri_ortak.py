@@ -122,9 +122,13 @@ def formul_katilim100_getirisi_oku(formul_ws):
     Turkish window labels one column over (47/"AU"). Verified against the
     legacy deck's real TLZ page figures — all 5 windows within ~1-3 points,
     consistent with ordinary as-of-date drift, not a wrong series.
-    Returns {pencere: yuzde} using this project's Pencere naming."""
-    DEGER_KOLON = 45  # 0-indexed tuple position = Excel column 46 ("AT")
-    ETIKET_KOLON = 46  # Excel column 47 ("AU")
+    Returns {pencere: yuzde} using this project's Pencere naming.
+
+    2026-11-23: sütun konumları artık sabit değil, başlıktan bulunuyor —
+    Formül'e araya sütun eklenince etiket AU'dan AW'ye kaymış, fonksiyon
+    sessizce {} döndürmüş ve TLZ'de Kasım başından beri BIST100 getirileri
+    "BIST Katılım 100" diye gösterilmişti."""
+    BASLIK = "BIST Katılım 100 Getiri"
     ETIKET_PENCERE = {
         "Aylık": "Aylik",
         "3 aylık": "3 Aylik",
@@ -132,10 +136,20 @@ def formul_katilim100_getirisi_oku(formul_ws):
         "Yıllık": "Yillik",
         "YTD": "Yilbasindan Beri",
     }
+    satirlar = list(formul_ws.iter_rows(min_row=62, max_row=70, values_only=True))
+    if not satirlar or BASLIK not in satirlar[0]:
+        return {}
+    deger_kolon = satirlar[0].index(BASLIK)
+    # Etiket sütunu: başlığın sağında, 63. satırında "Günlük" yazan ilk sütun.
+    etiket_kolon = next(
+        (i for i in range(deger_kolon + 1, len(satirlar[1])) if satirlar[1][i] == "Günlük"), None
+    )
+    if etiket_kolon is None:
+        return {}
     sonuc = {}
-    for row in formul_ws.iter_rows(min_row=63, max_row=70, values_only=True):
-        etiket = row[ETIKET_KOLON] if ETIKET_KOLON < len(row) else None
-        deger = row[DEGER_KOLON] if DEGER_KOLON < len(row) else None
+    for row in satirlar[1:]:
+        etiket = row[etiket_kolon] if etiket_kolon < len(row) else None
+        deger = row[deger_kolon] if deger_kolon < len(row) else None
         if etiket in ETIKET_PENCERE and isinstance(deger, (int, float)):
             sonuc[ETIKET_PENCERE[etiket]] = round(deger * 100, 1)
     return sonuc

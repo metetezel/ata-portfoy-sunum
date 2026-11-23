@@ -741,7 +741,6 @@ ekip_organizasyon = [
     ("Fon Yönetimi", "Varlık Yönetimi ve Yatırım Danışmanlığı", "Mete Tezel", ""),
     ("Fon Operasyon", "Fon Operasyon", "Niyazi Takmaz", ""),
     ("Fon Operasyon", "Fon Operasyon", "Güney Özütutar", ""),
-    ("Fon Operasyon", "Fon Operasyon", "Aslı Serin", ""),
     ("Fon Operasyon", "Risk Yönetimi", "Seyhan Dönmezkuş", ""),
     ("Fon Operasyon", "İç Kontrol", "Sema Zorbacı", ""),
     ("Fon Operasyon", "Teftiş", "Gökhan Küçüoğlu", ""),

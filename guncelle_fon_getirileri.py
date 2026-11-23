@@ -74,11 +74,15 @@ def main():
     # separate "Formül" sheet instead (see formul_katilim100_getirisi_oku).
     formul_ws = kaynak_wb["Formül"]
     katilim100 = formul_katilim100_getirisi_oku(formul_ws)
-    if "TLZ" in veriler and katilim100:
-        for pencere, dogru_bench_v in katilim100.items():
-            if pencere in veriler["TLZ"]:
-                fon_v, _yanlis_bench_v = veriler["TLZ"][pencere]
-                veriler["TLZ"][pencere] = (fon_v, dogru_bench_v)
+    # Katılım 100 okunamayan pencerede yanlış (BIST100) değeri bırakmak yerine
+    # boş yazılır ve uyarı basılır (2026-11-23: sessiz geri dönüş bug'ı).
+    if "TLZ" in veriler:
+        for pencere in list(veriler["TLZ"]):
+            fon_v, _yanlis_bench_v = veriler["TLZ"][pencere]
+            dogru_bench_v = katilim100.get(pencere)
+            if dogru_bench_v is None:
+                print(f"UYARI — TLZ {pencere}: Formül sayfasında BIST Katılım 100 bulunamadı, benchmark boş yazıldı.")
+            veriler["TLZ"][pencere] = (fon_v, dogru_bench_v)
 
     # Third instance of this same general class of bug (2026-07-29): ANZ's
     # adjacent "Benchmark***" row isn't mislabeled data exactly, but it's a

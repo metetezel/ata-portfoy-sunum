@@ -14,6 +14,8 @@ import datetime
 import json
 import os
 import statistics
+
+import openpyxl
 import requests
 
 # Copy of MCAP_to_GDP.xlsx ve MXWO vs MXEF (BB).xlsx artık okunmuyor —
@@ -22,6 +24,7 @@ import requests
 # projeden silinebilir hale geldi (Mete'nin "ne kadar az dosya olursa..."
 # isteğiyle).
 SABIT_KAYNAKLAR_KLASORU = os.path.join(os.path.dirname(__file__), "sabit_kaynaklar")
+VERI_KAYNAGI_YOLU = os.path.join(os.path.dirname(__file__), "Veri_Kaynagi.xlsx")
 EVDS_ANAHTAR_YOLU = os.path.join(os.path.dirname(__file__), "evds_api_anahtari.txt")
 # Z:'deki proje kopyasına göre göreli, sürücü harfine bağımlı değil — bkz.
 # build_fiyat_serisi.py'deki aynı değişiklik için yazılan not.
@@ -138,6 +141,25 @@ def evds_gsyih_oku():
     return gsyih_yillik
 
 
+def makro_tablosu_gsyih_oku():
+    # EVDS/IMF serisinde henüz olmayan yıllar (içinde bulunulan yıl) için
+    # yedek: Sayfa 7'nin kendi "GSYH (milyar $)" satırı. EVDS ile aynı birime
+    # (milyon $) çevriliyor. Aynı yıl içinde oran formülündeki GSYİH çarpanı
+    # 1'e sadeleştiği için bu değer o yılın eğrisini değiştirmez; yalnızca
+    # yıl geçişinde etkili olur.
+    wb = openpyxl.load_workbook(VERI_KAYNAGI_YOLU, data_only=True, read_only=True)
+    try:
+        return {
+            int(yil): float(deger) * 1000
+            for yil, gosterge, deger in wb["Makro_Gostergeler"].iter_rows(
+                min_row=2, max_col=3, values_only=True
+            )
+            if gosterge == "GSYH (milyar $)" and yil is not None and deger is not None
+        }
+    finally:
+        wb.close()
+
+
 def bist_gsyih_orani(xu100_usd_serisi):
     # Eskiden Copy of MCAP_to_GDP.xlsx "MCAP to GDP 93 (xu100)" sayfasından
     # canlı okunuyordu; 2026-07-30'da sabit_kaynaklar/mcap_gdp_gecmis.json'a
@@ -181,6 +203,13 @@ def bist_gsyih_orani(xu100_usd_serisi):
     except Exception as e:
         print(f"  UYARI — EVDS GSYİH okunamadı, oran serisi {son_bilinen_tarih} sonrası uzatılamayacak: {e}")
         gsyih_yillik = {}
+
+    for yil, deger in makro_tablosu_gsyih_oku().items():
+        if yil >= son_bilinen_yil and yil not in gsyih_yillik:
+            print(f"  NOT — EVDS'de {yil} GSYİH yok, Sayfa 7 tahmini kullanıldı: {deger / 1000:.0f} milyar $")
+            gsyih_yillik[yil] = deger
+    if son_bilinen_yil not in gsyih_yillik:
+        print(f"  UYARI — {son_bilinen_yil} GSYİH bulunamadı, oran serisi {son_bilinen_tarih} sonrası uzatılamadı.")
 
     if xu100_ref and gsyih_yillik:
         gsyih_ref = gsyih_yillik.get(son_bilinen_yil)
